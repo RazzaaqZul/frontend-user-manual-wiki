@@ -1,0 +1,47 @@
+@layer tailwind-base, primevue, tailwind-utilities;
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
+
+body {
+  overflow-x: hidden;
+  background-color: white;
+  scroll-behavior: smooth;
+}
+/* Scrollbar styling for WebKit browsers (Chrome, Safari, etc.) */
+.scrollbar::-webkit-scrollbar {
+  width: 4px;
+
+  /* Width of the scrollbar */
+}
+
+.border-gradient {
+  position: relative;
+  padding: 1.5px;
+  border-radius: 1rem;
+  background: linear-gradient(
+    180deg,
+    rgba(58, 133, 211, 1) 0%,
+    rgba(88, 169, 106, 1) 72%,
+    rgba(93, 175, 87, 1) 100%
+  );
+}
+
+.border-grey {
+  position: relative;
+  padding: 1.5px;
+  border-radius: 1rem;
+  background: #c0bfbf;
+}
+
+.border-gradient-inner {
+  background-color: white;
+  border-radius: inherit;
+  padding: 15px;
+}
