@@ -1,6 +1,11 @@
 <template>
   <div class="form-container">
     <form @submit.prevent="handleSubmit" class="form-layout">
+      <!-- Black Glassy Overlay -->
+      <div
+        v-if="showSuccessPopup || showErrorPopup || showSuccessEditPopup"
+        class="fixed inset-0 bg-primary-black bg-opacity-50 z-50 animate__animated animate__fadeIn"
+      ></div>
       <!-- Sampul (Cover) -->
       <div class="form-group">
         <label for="cover">Sampul:</label>
@@ -129,7 +134,28 @@
       <!-- <label v-if="errorMessage" class="text-red-custom">
         {{ errorMessage.title[0] }}
       </label> -->
+
+      <PopUpSuccessful
+        v-if="showSuccessPopup"
+        title="Selamat!"
+        message="Kamu berhasil membuat panduan baru"
+        class="popup-center animate__animated animate__zoomIn"
+      />
+      <PopUpSuccessful
+        v-if="showSuccessEditPopup"
+        title="Keren!"
+        message="Kamu berhasil mengedit panduan ini."
+        class="popup-center animate__animated animate__zoomIn"
+      />
+
+      <PopUpUnsuccessfull
+        v-if="showErrorPopup"
+        title="Error!"
+        :message="formattedMessage(errorMessage)"
+        class="popup-center animate__animated animate__zoomIn"
+      />
     </form>
+    <!-- PopUp Successful -->
   </div>
 </template>
 
@@ -140,6 +166,9 @@ import FormTextEditor from '../components/Form/FormTextEditor.vue'
 import FormImageInput from '../components/Form/FormImageInput.vue'
 import Select from 'primevue/select'
 import { useRouter } from 'vue-router'
+import PopUpSuccessful from '@/components/widgets/PopUpSuccessful.vue'
+import PopUpUnsuccessfull from '@/components/widgets/PopUpUnsuccessfull.vue'
+import { formattedMessage } from '@/helpers/FormattedMessageError'
 
 // Define props
 const props = defineProps({
@@ -230,6 +259,9 @@ const updateImage = (newImage) => {
 const errorMessage = ref({})
 
 const router = useRouter()
+const showSuccessPopup = ref(false)
+const showSuccessEditPopup = ref(false)
+const showErrorPopup = ref(false)
 
 // Handle form submission
 const handleSubmit = async () => {
@@ -240,15 +272,21 @@ const handleSubmit = async () => {
     response = await storeUserManual(form.value) // Call the store service
     if (response && response.status !== 201) {
       // Check for errors in response
-      console.log(response)
       errorMessage.value = response.data.errors || ['Unknown error occurred'] // Assign error messages to errorMessage
-
+      // Show PopUp
+      showErrorPopup.value = true
+      errorMessage.value = response.data.errors || ['Unknown error occurred']
       console.log(errorMessage.value)
-      console.log('Test')
+      setTimeout(() => {
+        showErrorPopup.value = false
+      }, 3000)
     } else {
       errorMessage.value = [] // Clear error message if no error
-      router.push(`/main/user-manuals/${response.data.data.user_manual_id}`)
-      console.log('Create successful:', response.data)
+      showSuccessPopup.value = true
+      setTimeout(() => {
+        showSuccessPopup.value = false
+        router.push(`/main/user-manuals/${response.data.data.user_manual_id}`)
+      }, 3000)
     }
   } else {
     response = await updateUserManual(form.value, form.value.user_manual_id)
@@ -258,11 +296,17 @@ const handleSubmit = async () => {
       errorMessage.value.version = [response.data.errors || ['Unknown error occurred']] // Assign error messages to errorMessage
 
       console.log(errorMessage.value.version)
-      console.log('Test')
+      showErrorPopup.value = true
+      setTimeout(() => {
+        showErrorPopup.value = false
+      }, 3000)
     } else {
       errorMessage.value = [] // Clear error message if no error
-      router.push(`/main/user-manuals/${response.data.data.user_manual_id}`)
-      console.log('Update successful:', response.data)
+      showSuccessEditPopup.value = true
+      setTimeout(() => {
+        showSuccessEditPopup.value = false
+        router.push(`/main/user-manuals/${response.data.data.user_manual_id}`)
+      }, 3000)
     }
   }
   console.log(response) // Log the response
@@ -282,6 +326,26 @@ const contentSize = () => {
 }
 </script>
 <style scoped>
+.popup-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* pastikan z-index lebih tinggi dari elemen lain */
+  animation: scale-in-center 0.4s ease-out;
+}
+
+@keyframes scale-in-center {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
 /* Container for the entire form */
 .form-container {
   background-color: #fff;

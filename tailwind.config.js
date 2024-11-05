@@ -12,7 +12,9 @@ export default {
       backgroundImage: {
         'gradient-color':
           'linear-gradient(180deg, rgba(58,133,211,1) 0%, rgba(88,169,106,1) 72%, rgba(93,175,87,1) 100%)',
-        'gradient-color-card': 'linear-gradient(135deg, #D3DB29 0%, #72BC63 50%, #208CCC 100%)'
+        'gradient-color-card': 'linear-gradient(135deg, #D3DB29 0%, #72BC63 50%, #208CCC 100%)',
+        'successfull-gradient':
+          'linear-gradient(90deg, rgba(58,133,211,1) 0%, rgba(88,169,106,1) 63%, rgba(93,175,87,1) 100%)'
       },
       keyframes: {
         shake: {
@@ -52,12 +54,14 @@ export default {
       'soft-yellow-transparent': '#D3DB29',
       'green-custom': '#3BAB47',
       'red-custom': '#FF0000',
+      'red-error': '#C60000',
       'dark-red': '#BE2727',
       'grey-background': '#D9D9D9',
       'grey-word': '#7A7A7A',
       'grey-input': '#F1F1F1',
       'grey-button': '#A3A3A3',
-      'white-background': '#FFFFFF'
+      'white-background': '#FFFFFF',
+      'primary-black': '#000000'
     }
   },
   plugins: [tailwindScrollbar, tailwindPrimeUI]

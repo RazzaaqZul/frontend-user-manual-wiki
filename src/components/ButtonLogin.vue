@@ -1,19 +1,93 @@
 <template>
-  <RouterLink to="/login">
-    <button
-      class="bg-white-background shadow-lg drop-shadow-lg w-fit flex justify-center items-center gap-3 rounded-3xl py-2 px-6 hover:scale-110 duration-150"
-    >
-      <div class="bg-gradient-color w-fit rounded-full p-2">
-        <img src="`../assets/icon/icon-user.png`" :alt="'logo_user'" class="w-5" />
+  <button
+    @click="toggle"
+    class="bg-white-background shadow-lg drop-shadow-lg w-fit flex justify-center items-center gap-3 rounded-3xl py-2 px-6 hover:scale-110 duration-150"
+  >
+    <div class="bg-gradient-color w-fit rounded-full p-2">
+      <img src="../assets/icon/icon-user.png" :alt="'logo_user'" class="w-5" />
+    </div>
+    <h1 class="font-normal text-grey-word capitalize">{{ userRole || 'Log In' }}</h1>
+    <img src="../assets/icon/icon-arrow-right.png" :alt="'logo_user'" class="w-4" />
+  </button>
+
+  <Popover ref="popoverRef" class="ml-[30px]">
+    <div class="flex flex-col gap-4">
+      <div>
+        <span class="font-semibold block mb-2 text-dark-blue">Account Options</span>
+        <ul class="list-none p-0 m-0 flex flex-col">
+          <li
+            v-for="option in filteredOptions"
+            :key="option.name"
+            class="flex items-center gap-2 px-2 py-2 hover:bg-emphasis cursor-pointer rounded-border"
+            @click="selectOption(option)"
+          >
+            <div>
+              <span class="font-medium text-soft-blue">{{ option.name }}</span>
+            </div>
+          </li>
+        </ul>
       </div>
-      <h1 class="font-normal text-grey-word capitalize">{{ role ? role : 'Log In' }}</h1>
-      <img src="`../assets/icon/icon-arrow-right.png`" :alt="'logo_user'" class="w-4" />
-    </button>
-  </RouterLink>
+    </div>
+  </Popover>
 </template>
 
 <script setup>
-const tokenData = localStorage.getItem('user')
-const tokenObject = JSON.parse(tokenData)
-const role = tokenObject?.role
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import Popover from 'primevue/popover'
+import { userLogout } from '@/services/modules/AuthService'
+
+const router = useRouter()
+const popoverRef = ref()
+const selectedOption = ref(null)
+
+// Get user data from localStorage with error handling
+const getUserData = () => {
+  try {
+    const userData = localStorage.getItem('user')
+    return userData ? JSON.parse(userData) : null
+  } catch (error) {
+    console.error('Error parsing user data:', error)
+    return null
+  }
+}
+
+// Computed property for user role
+const userRole = computed(() => {
+  const userData = getUserData()
+  return userData?.role || null
+})
+
+// Computed property for filtered options based on auth state
+const filteredOptions = computed(() => {
+  const isAuthenticated = !!getUserData()
+  return isAuthenticated ? [{ name: 'Logout' }] : [{ name: 'Login' }]
+})
+
+// Handle option selection
+const selectOption = async (option) => {
+  selectedOption.value = option
+  popoverRef.value?.hide()
+
+  if (option.name === 'Login') {
+    router.push('/login')
+  } else if (option.name === 'Logout') {
+    try {
+      const response = await userLogout()
+      console.log(response.status)
+      if (response.status === 200 || response.status === 401) {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        router.go('/')
+      }
+    } catch (err) {
+      return err
+    }
+  }
+}
+
+// Toggle popover
+const toggle = (event) => {
+  popoverRef.value?.toggle(event)
+}
 </script>

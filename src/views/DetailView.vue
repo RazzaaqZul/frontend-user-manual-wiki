@@ -40,7 +40,10 @@
           <span class="font-light">{{ formatDate(dataUserManual.updated_at) }}</span>
         </div>
         <div class="flex justify-end items-center gap-2">
-          <RouterLink :to="`/main/user-manuals/${dataUserManual.user_manual_id}/edit`">
+          <RouterLink
+            :to="`/main/user-manuals/${dataUserManual.user_manual_id}/edit`"
+            v-if="isDisplay"
+          >
             <ButtonComponent
               icon="icon-edit.png"
               name="Edit"
@@ -49,7 +52,10 @@
               text="text-soft-blue"
             />
           </RouterLink>
-          <RouterLink :to="`/main/user-manuals/${dataUserManual.user_manual_id}/histories`">
+          <RouterLink
+            :to="`/main/user-manuals/${dataUserManual.user_manual_id}/histories`"
+            v-if="isDisplay"
+          >
             <ButtonComponent
               icon="icon-history.png"
               name="History"
@@ -71,26 +77,35 @@ import DetailContent from '@/components/Detail/DetailContent.vue'
 import DetailSideBar from '@/components/Detail/DetailSideBar.vue'
 // import SearchComponent from '@/components/SearchComponent.vue'
 import { showUserManual } from '@/services/modules/UserManualService'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import ButtonComponent from '../components/ButtonComponent.vue'
 import ProgressSpinner from 'primevue/progressspinner'
 import { formatDate } from '@/helpers/FormatDate'
 import NavbarComponent from '@/components/NavbarComponent.vue'
+import { fetchUserRole } from '@/services/modules/UserService'
 
 let dataUserManual = ref([]) // reactive data
 const fetchingUserManuals = ref(false)
-
 const route = useRoute()
+const userRole = ref(null) // Placeholder for user role
 
 onMounted(async () => {
   try {
     fetchingUserManuals.value = true
     dataUserManual.value = await showUserManual(route.params.id)
+
+    // Fetch user role
+    userRole.value = await fetchUserRole() // Await the fetchUserRole function
   } catch (error) {
     console.error('Failed to fetch user manuals:', error)
   } finally {
     fetchingUserManuals.value = false
   }
 })
+
+// Determine if the user has permission to display content
+const isDisplay = computed(
+  () => userRole.value === 'admin' || userRole.value === 'technical_writer'
+)
 </script>

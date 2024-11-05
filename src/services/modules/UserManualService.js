@@ -8,7 +8,8 @@ export const indexUserManual = async () => {
       }
     }
     const response = await axios.get('/api/user-manuals', config)
-    console.log(response.data.data)
+    // console.log(response)
+    // console.log(response.data.data)
     return response.data.data
   } catch (err) {
     console.log(err)
@@ -22,7 +23,9 @@ export const showUserManual = async (id) => {
         Accept: 'application/json'
       }
     }
+
     const response = await axios.get(`/api/user-manuals/${id}`, config)
+    // console.log(response)
     return response.data.data
   } catch (err) {
     console.log(err.response.data)
@@ -39,7 +42,7 @@ export const storeUserManual = async (request) => {
     const tokenData = localStorage.getItem('token')
     const tokenObject = JSON.parse(tokenData)
     const token = tokenObject.token
-    console.warn(data)
+    // console.warn(data)
     let config = {
       headers: {
         Accept: 'application/json',
@@ -95,5 +98,15 @@ export const destroyUserManual = async (id) => {
     return response.data.data
   } catch (err) {
     console.log(err.response.data)
+  }
+}
+
+export const userManualSeacrh = async (newQuery) => {
+  try {
+    const response = await axios.get(`/api/user-manuals/search?q=${newQuery}`)
+    console.log(response)
+    return response.data.data
+  } catch (err) {
+    console.log(err)
   }
 }

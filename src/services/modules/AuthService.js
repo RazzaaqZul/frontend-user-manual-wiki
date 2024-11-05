@@ -46,3 +46,29 @@ export const userRegister = async (request) => {
     return err.response
   }
 }
+
+export const userLogout = async () => {
+  try {
+    const tokenData = localStorage.getItem('token')
+    const tokenObject = JSON.parse(tokenData)
+    const token = tokenObject?.token
+
+    const config = {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}` // Menyertakan token dalam header Authorization
+      }
+    }
+
+    const response = await axios.delete('/api/logout', config)
+
+    // Menghapus data dari localStorage setelah logout berhasil
+    localStorage.removeItem('token')
+    localStorage.removeItem('user') // Jika ada data user lain yang ingin dihapus
+
+    return response
+  } catch (err) {
+    console.error('Error during logout:', err)
+    return err
+  }
+}
