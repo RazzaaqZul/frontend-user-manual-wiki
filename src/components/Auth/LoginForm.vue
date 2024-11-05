@@ -17,6 +17,13 @@
         />
       </div>
     </div>
+    <!-- Error message for password -->
+    <p
+      v-if="errors?.username?.[0]"
+      class="text-red-custom text-md capitalize my-2 animate__animated animate__fadeInDown"
+    >
+      {{ errors?.username?.[0] }}
+    </p>
 
     <!-- Password field -->
     <div class="mb-4">
@@ -32,7 +39,18 @@
         />
       </div>
       <!-- Error message for password -->
-      <p v-if="errors.message" class="text-red-custom text-md capitalize my-6">
+      <p
+        v-if="errors?.password?.[0]"
+        class="text-red-custom text-md capitalize my-2 animate__animated animate__fadeInDown"
+      >
+        {{ errors?.password?.[0] }}
+      </p>
+
+      <!-- Error message for password -->
+      <p
+        v-if="errors.message"
+        class="text-red-custom text-md capitalize my-6 animate__animated animate__fadeInDown"
+      >
         {{ errors.message }}
       </p>
     </div>
@@ -61,9 +79,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, defineEmits } from 'vue'
 import { useRouter } from 'vue-router'
 import { userLogin } from '../../services/modules/AuthService'
+
+// Define the emit function
+const emit = defineEmits(['success', 'error'])
 
 // Define the input state
 const input = ref({
@@ -73,7 +94,9 @@ const input = ref({
 
 // Error state
 const errors = ref({
-  message: ''
+  username: null,
+  password: null,
+  message: null
 })
 
 // Get the router instance
@@ -85,14 +108,21 @@ const handleSubmit = async () => {
   errors.value = { username: '', password: '', general: '' }
 
   const response = await userLogin(input.value)
-
-  console.log(!response.data)
-  // If login is successful, navigate to "/main"
-  if (response.data) {
-    router.push('/main')
-  } else if (response.errors) {
-    console.log(response.errors[0])
-    errors.value.message = response.errors[0]
+  console.log(response.errors)
+  if (response.status === 400 && response.data?.errors) {
+    errors.value = response.data.errors || ['Unknown error occurred']
+    emit('error', errors.value) // Emit error event with errors
+    return
+  } else if (response.status === 401) {
+    errors.value.message = 'Username or Password Wrong'
+    emit('error', errors.value) // Emit error event with errors
+    return
+  } else {
+    errors.value = [] // Clear error message if no error
+    emit('success') // Emit success event for successful login
+    setTimeout(() => {
+      router.push('/main')
+    }, 3000)
   }
 }
 
@@ -103,5 +133,7 @@ const inputStyle = () => {
 // Clear error when user focuses on input field
 const clearError = () => {
   errors.value.message = ''
+  errors.value.username = ''
+  errors.value.password = ''
 }
 </script>

@@ -91,7 +91,9 @@
                 :class="[inputStyle()]"
               />
             </div>
-            <label v-if="errors?.email?.[0]" :class="[errorStyle()]">{{ errors.email[0] }}</label>
+            <label v-if="errors?.email?.[0]" :class="[errorStyle()]" cla>{{
+              errors.email[0]
+            }}</label>
           </div>
           <div>
             <label>Real Name <span class="text-red-custom font-extrabold">*</span></label>
@@ -116,12 +118,27 @@
       </section>
     </transition>
   </div>
+  <PopUpUnsuccessfull
+    v-if="showErrorPopup"
+    title="Error!"
+    :message="formattedMessage(errors)"
+    class="popup-center animate__animated animate__zoomIn"
+  />
+  <PopUpSuccessful
+    v-if="showSuccessPopup"
+    title="Selamat Datang!"
+    message="Kamu berhasil membuat akun"
+    class="popup-center animate__animated animate__zoomIn"
+  />
 </template>
 
 <script setup>
 import { userRegister } from '@/services/modules/AuthService'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import PopUpUnsuccessfull from '../widgets/PopUpUnsuccessfull.vue'
+import { formattedMessage } from '@/helpers/FormattedMessageError'
+import PopUpSuccessful from '../widgets/PopUpSuccessful.vue'
 
 const input = ref({
   username: '',
@@ -144,17 +161,23 @@ const inputStyle = () => {
 }
 
 const errorStyle = () => {
-  return 'text-red-custom'
+  return 'text-red-custom animate__animated animate__fadeInDown '
 }
+
+// Error handle
 
 const router = useRouter()
 const currentSlide = ref(1)
+const showErrorPopup = ref(false)
+const showSuccessPopup = ref(false)
+const emit = defineEmits(['success', 'error'])
 
 const handleSubmit = async () => {
   errors.value = {}
 
   if (input.value.password !== input.value.confirmPassword) {
     errors.value.confirmPassword = ['Passwords do not match']
+    emit('error', errors.value)
     return
   }
 
@@ -163,13 +186,15 @@ const handleSubmit = async () => {
 
     if (response.status === 400 && response.data?.errors) {
       errors.value = response.data.errors
-      console.log(errors.value)
+      emit('error', errors.value)
       return
+    } else {
+      errors.value = {} // Clear error message if no error
+      emit('success')
+      setTimeout(() => {
+        router.push('/login')
+      }, 3000)
     }
-    console.log(response)
-    router.push('/login')
-    errors.value = {}
-    console.log('Account successfully created')
   } catch (err) {
     console.error('Error while registering:', err)
   }

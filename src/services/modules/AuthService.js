@@ -17,9 +17,9 @@ export const userLogin = async (request) => {
     localStorage.setItem('user', JSON.stringify(getResponse.data))
     localStorage.setItem('token', JSON.stringify(getResponse.token))
 
-    return response.data.data
+    return response
   } catch (err) {
-    return err.response?.data
+    return err.response
   }
 }
 
