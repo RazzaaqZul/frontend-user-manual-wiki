@@ -7,7 +7,7 @@
     >
       <div class="flex justify-between items-center gap-4 h-[100%]">
         <div :class="[isHovered ? 'text-white-background' : 'text-soft-blue', 'duration-300']">
-          <h2 class="text-lg font-bold mb-2">{{ title }}</h2>
+          <h2 class="text-sm line-clamp-2 font-bold mb-2">{{ title }}</h2>
           <h3 class="text-sm line-clamp-2">{{ short_desc }}</h3>
         </div>
         <!-- Menggunakan computed property imageUrl sebagai sumber gambar -->
@@ -35,6 +35,7 @@ const props = defineProps({
 
 // Compute the main image URL
 const imageUrl = computed(() => `${import.meta.env.VITE_BASE_URL}/storage/${props.img}`)
+console.log(imageUrl.value)
 
 // Reactive property to track hover state
 const isHovered = ref(false)

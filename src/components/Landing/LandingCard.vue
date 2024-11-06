@@ -4,8 +4,8 @@
   >
     <img :src="imageUrl" :alt="title" class="w-16 h-16 object-contain" />
     <div class="flex-1">
-      <h1 class="text-lg font-semibold text-grey-word">{{ title }}</h1>
-      <h2 class="text-sm text-grey-word line-clamp-2">{{ short_desc }}</h2>
+      <h1 class="text-sm line-clamp-2 font-semibold text-grey-word">{{ title }}</h1>
+      <h2 class="text-sm line-clamp-2 text-grey-word">{{ short_desc }}</h2>
     </div>
   </article>
 </template>

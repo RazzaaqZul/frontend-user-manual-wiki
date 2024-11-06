@@ -8,7 +8,9 @@
     <div class="relative">
       <img src="../assets/images/detail-background.png" class="w-full" />
       <div class="absolute inset-0 flex items-center justify-center">
-        <h1 class="font-bold text-[40px] text-white-background">{{ dataUserManual.title }}</h1>
+        <h1 class="w-[40%] text-center font-bold text-[25px] text-white-background">
+          {{ dataUserManual.title }}
+        </h1>
       </div>
       <!-- button back to main page -->
       <div class="absolute left-[5%] top-[30%] flex justify-center items-center gap-4">

@@ -314,10 +314,18 @@ const handleSubmit = async () => {
       }
     } else {
       response = await updateUserManual(form.value, form.value.user_manual_id)
-      if (response && response.status !== 200) {
+      if (response.status === 400) {
         // Check for errors in response
         console.log(response)
-        errorMessage.value.version = [response.data.errors || ['Unknown error occurred']] // Assign error messages to errorMessage
+        if (response.data.errors.title) {
+          console.log('ini title')
+          errorMessage.value.title = [response.data.errors.title]
+        } else if (response.data.errors.version) {
+          console.log('ini version')
+          errorMessage.value.version = [response.data.errors.version]
+        } else {
+          errorMessage.value = response.data.errors
+        }
 
         console.log(errorMessage.value.version)
         showErrorPopup.value = true
