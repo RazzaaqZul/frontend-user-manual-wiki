@@ -10,10 +10,11 @@
           <h2 class="text-lg font-bold mb-2">{{ title }}</h2>
           <h3 class="text-sm line-clamp-2">{{ short_desc }}</h3>
         </div>
+        <!-- Menggunakan computed property imageUrl sebagai sumber gambar -->
         <img :src="imageUrl" :alt="title" class="w-16 h-16 object-contain" />
       </div>
 
-      <!-- Conditional image change based on hover state -->
+      <!-- Gambar yang berubah berdasarkan status hover -->
       <img
         :src="isHovered ? nextIconWhite : nextIconGradient"
         :class="isHovered ? `w-2 absolute right-4` : `w-4 absolute right-4`"
@@ -33,7 +34,7 @@ const props = defineProps({
 })
 
 // Compute the main image URL
-const imageUrl = computed(() => new URL(`${props.img}`, import.meta.url).href)
+const imageUrl = computed(() => `${import.meta.env.VITE_BASE_URL}storage/${props.img}`)
 
 // Reactive property to track hover state
 const isHovered = ref(false)

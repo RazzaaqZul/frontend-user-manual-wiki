@@ -111,34 +111,30 @@
           <button
             type="submit"
             class="absolute bottom-[5%] bg-dark-blue text-white-background p-3 rounded-xl w-full"
+            :disabled="loading"
           >
-            Create Account
+            <template v-if="loading">
+              <ProgressSpinner
+                style="width: 20px; height: 20px"
+                strokeWidth="8"
+                fill="transparent"
+                animationDuration=".9s"
+                aria-label="Custom ProgressSpinner"
+              />
+            </template>
+            <template v-else> Create Account </template>
           </button>
         </form>
       </section>
     </transition>
   </div>
-  <PopUpUnsuccessfull
-    v-if="showErrorPopup"
-    title="Error!"
-    :message="formattedMessage(errors)"
-    class="popup-center animate__animated animate__zoomIn"
-  />
-  <PopUpSuccessful
-    v-if="showSuccessPopup"
-    title="Selamat Datang!"
-    message="Kamu berhasil membuat akun"
-    class="popup-center animate__animated animate__zoomIn"
-  />
 </template>
-
 <script setup>
 import { userRegister } from '@/services/modules/AuthService'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import PopUpUnsuccessfull from '../widgets/PopUpUnsuccessfull.vue'
-import { formattedMessage } from '@/helpers/FormattedMessageError'
-import PopUpSuccessful from '../widgets/PopUpSuccessful.vue'
+
+import ProgressSpinner from 'primevue/progressspinner'
 
 const input = ref({
   username: '',
@@ -148,55 +144,41 @@ const input = ref({
   name: ''
 })
 
-const errors = ref({
-  username: null,
-  password: null,
-  confirmPassword: null,
-  email: null,
-  name: null
-})
+const errors = ref({})
+const loading = ref(false)
 
-const inputStyle = () => {
-  return 'border-gradient-inner focus:outline-none focus:ring-2 focus:ring-soft-blue focus:border-transparent w-full'
-}
-
-const errorStyle = () => {
-  return 'text-red-custom animate__animated animate__fadeInDown '
-}
-
-// Error handle
+const inputStyle = () =>
+  'border-gradient-inner focus:outline-none focus:ring-2 focus:ring-soft-blue focus:border-transparent w-full'
+const errorStyle = () => 'text-red-custom animate__animated animate__fadeInDown'
 
 const router = useRouter()
 const currentSlide = ref(1)
-const showErrorPopup = ref(false)
-const showSuccessPopup = ref(false)
+
 const emit = defineEmits(['success', 'error'])
 
 const handleSubmit = async () => {
   errors.value = {}
-
   if (input.value.password !== input.value.confirmPassword) {
     errors.value.confirmPassword = ['Passwords do not match']
     emit('error', errors.value)
     return
   }
 
+  loading.value = true // Start loading
   try {
     const response = await userRegister(input.value)
-
     if (response.status === 400 && response.data?.errors) {
       errors.value = response.data.errors
       emit('error', errors.value)
-      return
     } else {
-      errors.value = {} // Clear error message if no error
+      errors.value = {} // Clear errors if successful
       emit('success')
-      setTimeout(() => {
-        router.push('/login')
-      }, 3000)
+      setTimeout(() => router.push('/login'), 3000)
     }
   } catch (err) {
     console.error('Error while registering:', err)
+  } finally {
+    loading.value = false // Stop loading
   }
 }
 
@@ -205,18 +187,11 @@ const handleNext = () => {
     errors.value.confirmPassword = ['Passwords do not match']
     return
   }
-  if (currentSlide.value == 2) {
-    currentSlide.value = 1
-  } else {
-    currentSlide.value = 2
-  }
+  currentSlide.value = currentSlide.value === 1 ? 2 : 1
 }
 
-const clearError = () => {
-  errors.value = {}
-}
+const clearError = () => (errors.value = {})
 </script>
-
 <style scoped>
 /* Slide Transitions */
 .slide-enter-active,

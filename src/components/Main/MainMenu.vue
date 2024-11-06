@@ -45,6 +45,16 @@
   <div v-else class="flex justify-center items-center h-[50vh]">
     <ProgressSpinner />
   </div>
+
+  <div
+    v-if="isEmpty"
+    class="flex flex-col gap-10 justify-center items-center h-[50vh] animate__animated animate__tada"
+  >
+    <img src="../../assets/images/image-search-not-found.png" class="w-[20%]" />
+    <h1 class="font-semibold text-soft-blue">
+      Try creating the page of User Manual on this wiki to help others!
+    </h1>
+  </div>
 </template>
 
 <script setup>
@@ -62,7 +72,7 @@ const fetchingUserManuals = ref(false)
 const isLoading = computed(() => fetchingUserManuals.value)
 const query = ref('')
 const searchMatchMap = ref(new Map()) // Track which items actually matched the search
-
+const isEmpty = ref(false)
 const props = defineProps({
   selectedCategory: {
     type: String,
@@ -104,10 +114,12 @@ const fetchUserManuals = async () => {
   fetchingUserManuals.value = true
   try {
     const response = await indexUserManual()
+    if (response.status === 404) {
+      return (isEmpty.value = true)
+    }
     dataUserManual.value = response || []
   } catch (error) {
-    console.error('Failed to fetch user manuals:', error)
-    dataUserManual.value = []
+    return error
   } finally {
     fetchingUserManuals.value = false
   }

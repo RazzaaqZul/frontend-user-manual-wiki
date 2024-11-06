@@ -8,11 +8,9 @@ export const indexUserManual = async () => {
       }
     }
     const response = await axios.get('/api/user-manuals', config)
-    // console.log(response)
-    // console.log(response.data.data)
     return response.data.data
   } catch (err) {
-    console.log(err)
+    return err.response
   }
 }
 
@@ -34,18 +32,15 @@ export const showUserManual = async (id) => {
 
 export const storeUserManual = async (request) => {
   try {
-    // Filter out properties with empty values from the request data
-    // const filteredData = Object.fromEntries(
-    //   Object.entries(request).filter(([key, value]) => value !== '')
-    // );
     const data = request
     const tokenData = localStorage.getItem('token')
     const tokenObject = JSON.parse(tokenData)
     const token = tokenObject.token
+
     // console.warn(data)
     let config = {
       headers: {
-        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`
       }
     }
@@ -59,23 +54,26 @@ export const storeUserManual = async (request) => {
 
 export const updateUserManual = async (request, id) => {
   try {
-    // Filter out properties with empty values from the request data
-    // const filteredData = Object.fromEntries(
-    //   Object.entries(request).filter(([key, value]) => value !== '')
-    // );
-
     const tokenData = localStorage.getItem('token')
     const tokenObject = JSON.parse(tokenData)
     const token = tokenObject.token
 
     let config = {
       headers: {
-        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`
       }
     }
 
-    const response = await axios.put(`/api/user-manuals/${id}`, request, config)
+    console.log('Data request')
+    console.log(request)
+
+    /**
+     * Laravel REST API PATCH and PUT method does not work with form-data,
+     * it's known issue of Symfony and even PHP
+     */
+    const response = await axios.post(`/api/user-manuals/${id}?_method=PUT`, request, config)
+    console.log(response)
     return response // Return the response on success
   } catch (err) {
     console.error(err)

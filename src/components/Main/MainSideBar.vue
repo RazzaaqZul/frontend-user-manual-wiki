@@ -73,6 +73,10 @@ onMounted(async () => {
 })
 
 const filteredManuals = (category) => {
+  if (!Array.isArray(dataUserManual.value)) {
+    return [] // Return an empty array to prevent further errors
+  }
+
   return dataUserManual.value.filter((manual) => manual.category === category)
 }
 </script>

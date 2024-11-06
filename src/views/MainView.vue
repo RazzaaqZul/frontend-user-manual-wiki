@@ -20,7 +20,12 @@
           >
             <img src="../assets/icon/icon-humberger-bar.png" class="w-5" />
           </div>
-          <img src="../assets/icon/logo-bpjamsostek-color.png" class="w-36" />
+          <RouterLink to="/">
+            <img
+              src="../assets/icon/logo-bpjamsostek-color.png"
+              class="w-36 cursor-pointer hover:scale-105 duration-200"
+            />
+          </RouterLink>
         </div>
         <SearchComponent @update:searchResults="searchResults = $event" class="basis-[65%]" />
         <ButtonLogin />

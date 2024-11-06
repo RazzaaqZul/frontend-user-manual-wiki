@@ -1,141 +1,119 @@
 <template>
-  <div class="upload-container flex justify-center items-center w-full gap-6">
+  <div class="upload-container flex items-center w-full gap-6">
     <!-- Image Preview -->
     <img v-if="cover" :src="cover" alt="Cover Preview" class="w-[6%]" />
     <img v-else src="../../assets/images/image-default.png" alt="Cover Preview" class="w-[6%]" />
 
-    <!-- Radio buttons to switch between file or URL -->
-    <SelectButton
-      v-model="uploadMethod"
-      :options="options"
-      optionLabel="label"
-      optionValue="value"
-      class="w-96"
-      allowEmpty
-    />
-
-    <!-- Display file input if 'file' is selected -->
-    <div v-if="uploadMethod === 'file'" class="flex items-center justify-between w-full">
-      <input
-        type="file"
-        @change="onFileChange"
-        class="file-input border-field p-1 w-full basis-[79%]"
-      />
-      <button type="button" class="upload-button basis-[21%]">Set Image</button>
-    </div>
-
-    <!-- Display URL input if 'url' is selected -->
-    <div v-if="uploadMethod === 'url'" class="flex items-center justify-between w-full">
-      <input
-        type="text"
-        v-model="imageUrl"
-        placeholder="Enter image URL"
-        class="border-field p-2 w-full basis-[79%]"
-      />
-      <button type="button" class="upload-button basis-[21%]" @click="setImageUrl">
-        Set Image
-      </button>
-    </div>
+    <!-- File input for image upload -->
+    <section class="w-full">
+      <div v-if="uploadMethod === 'file'" class="flex justify-start w-full gap-4">
+        <FileUpload
+          ref="fileupload"
+          mode="basic"
+          :maxFileSize="1000000"
+          @select="onFileSelect"
+          :auto="true"
+          chooseLabel="Pilih Gambar"
+          accept="image/*"
+          class="bg-soft-blue"
+        />
+        <!-- Menampilkan nama file -->
+      </div>
+      <span v-if="selectedFileName" class="text-gray-600 truncate">
+        {{ selectedFileName }}
+      </span>
+    </section>
   </div>
 </template>
 
 <script setup>
+import FileUpload from 'primevue/fileupload'
 import { ref, watch } from 'vue'
-import SelectButton from 'primevue/selectbutton'
 
-// Props for image handling
+// Define props and emit
 const props = defineProps({
-  img: String,
+  img: {
+    type: [String, File],
+    default: ''
+  },
   form: Object
 })
-
-// Emit for updates
 const emit = defineEmits(['update:img'])
 
-// Options for upload method
-const options = [
-  { label: 'Upload File', value: 'file', constant: true },
-  { label: 'URL Image', value: 'url', constant: false }
-]
-
 // Local state
-const cover = ref(props.img || '')
-const imageUrl = ref('') // For storing the image URL
-const uploadMethod = ref('file') // Default method is file upload
+const cover = ref('')
+const uploadMethod = ref('file')
+const fileupload = ref()
+const selectedFileName = ref('') // Tambahkan ref untuk nama file
 
-// Watch for changes to the img prop and update local cover and imageUrl accordingly
+// Watch for changes in the image prop
 watch(
   () => props.img,
-  (newImg) => {
-    if (newImg && newImg.startsWith('http')) {
-      imageUrl.value = newImg // If it's a URL, set imageUrl
+  async (newImg) => {
+    if (newImg) {
+      if (typeof newImg === 'string' && newImg.includes('images/user_manuals/')) {
+        cover.value = `${import.meta.env.VITE_BASE_URL}storage/${newImg}`
+        selectedFileName.value = newImg.split('/').pop() // Ambil nama file dari path
+      } else if (newImg instanceof File) {
+        const base64Image = await fileToBase64(newImg)
+        cover.value = base64Image
+        selectedFileName.value = newImg.name // Set nama file
+      }
     } else {
-      cover.value = newImg // Otherwise, set the cover for file upload
+      cover.value = ''
+      selectedFileName.value = '' // Reset nama file
     }
   },
-  { immediate: true } // Ensure the watcher runs immediately when the component is mounted
+  { immediate: true }
 )
 
-// Function to handle file change
-const onFileChange = (e) => {
-  const file = e.target.files[0]
+// Function to handle file selection
+const onFileSelect = (event) => {
+  const file = event.files[0]
   if (file) {
+    emit('update:img', file)
+    selectedFileName.value = file.name // Set nama file yang dipilih
+
+    // Optional: Clear the upload after emitting
+    if (fileupload.value) {
+      fileupload.value.clear()
+    }
+  }
+}
+
+// Function to convert a File to Base64
+const fileToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = (e) => {
-      cover.value = e.target.result
-      emit('update:img', e.target.result) // Emit the updated image data as base64
+      resolve(e.target.result)
+    }
+    reader.onerror = (error) => {
+      reject(error)
     }
     reader.readAsDataURL(file)
-  }
+  })
 }
-
-// Function to handle URL image input
-const setImageUrl = () => {
-  if (imageUrl.value) {
-    cover.value = imageUrl.value
-    emit('update:img', imageUrl.value) // Emit the updated image URL
-  }
-}
-
-// Keep track of the previous value for the SelectButton
-let previousValue = 'file'
-watch(uploadMethod, (newValue) => {
-  if (!newValue) {
-    // If value is empty, reset it to the previous value
-    uploadMethod.value = previousValue
-  } else {
-    // Update previous value whenever a valid new value is selected
-    previousValue = newValue
-  }
-})
-
-// Watch imageUrl and update cover when the URL changes
-watch(imageUrl, (newUrl) => {
-  if (newUrl) {
-    cover.value = newUrl
-    emit('update:img', newUrl) // Emit the new image URL
-  }
-})
 </script>
 
 <style scoped>
-/* Image preview and file input styles */
-.upload-container img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: cover;
+/* Optional: Style untuk container file upload */
+.upload-container {
+  min-height: 50px;
 }
 
-.upload-button {
-  background-color: #ccc;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  border: none;
+/* Optional: Style untuk nama file */
+.truncate {
+  max-width: 300px; /* atau sesuaikan dengan kebutuhan */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-
-.border-field {
+.input-field {
+  width: 100%;
+  padding: 2px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  font-size: 16px;
 }
 </style>

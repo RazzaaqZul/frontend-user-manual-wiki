@@ -17,5 +17,5 @@ const props = defineProps({ title: String, img: String, short_desc: String })
 
 // Membuat URL gambar
 // const imageUrl = computed(() => new URL(`../../assets/icon/${props.img}`, import.meta.url).href)
-const imageUrl = computed(() => new URL(`${props.img}`, import.meta.url).href)
+const imageUrl = computed(() => `${import.meta.env.VITE_BASE_URL}storage/${props.img}`)
 </script>

@@ -17,7 +17,6 @@
         />
       </div>
     </div>
-    <!-- Error message for password -->
     <p
       v-if="errors?.username?.[0]"
       class="text-red-custom text-md capitalize my-2 animate__animated animate__fadeInDown"
@@ -38,15 +37,12 @@
           :class="[inputStyle()]"
         />
       </div>
-      <!-- Error message for password -->
       <p
         v-if="errors?.password?.[0]"
         class="text-red-custom text-md capitalize my-2 animate__animated animate__fadeInDown"
       >
         {{ errors?.password?.[0] }}
       </p>
-
-      <!-- Error message for password -->
       <p
         v-if="errors.message"
         class="text-red-custom text-md capitalize my-6 animate__animated animate__fadeInDown"
@@ -55,18 +51,25 @@
       </p>
     </div>
 
-    <!-- Login button -->
+    <!-- Login button with loading spinner -->
     <div class="mb-4">
       <button
         type="submit"
         class="w-full bg-dark-blue text-white-background font-bold py-3 px-4 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+        :disabled="loading"
       >
-        LOG IN
+        <template v-if="loading">
+          <ProgressSpinner
+            style="width: 25px; height: 25px"
+            strokeWidth="8"
+            fill="transparent"
+            animationDuration=".9s"
+            aria-label="Custom ProgressSpinner"
+          />
+        </template>
+        <template v-else> LOG IN </template>
       </button>
     </div>
-
-    <!-- General error message (like 401 unauthorized) -->
-    <!-- <p v-if="errors.general" class="text-red-custom text-center mt-3">{{ errors.general }}</p> -->
 
     <!-- Sign Up link -->
     <div class="text-center">
@@ -82,47 +85,48 @@
 import { ref, defineEmits } from 'vue'
 import { useRouter } from 'vue-router'
 import { userLogin } from '../../services/modules/AuthService'
+import ProgressSpinner from 'primevue/progressspinner'
 
-// Define the emit function
 const emit = defineEmits(['success', 'error'])
 
-// Define the input state
 const input = ref({
   username: '',
   password: ''
 })
 
-// Error state
 const errors = ref({
   username: null,
   password: null,
   message: null
 })
 
-// Get the router instance
 const router = useRouter()
+const loading = ref(false) // Loading state
 
-// Method to handle form submission
 const handleSubmit = async () => {
-  // Reset errors
   errors.value = { username: '', password: '', general: '' }
+  loading.value = true // Start loading
 
-  const response = await userLogin(input.value)
-  console.log(response.errors)
-  if (response.status === 400 && response.data?.errors) {
-    errors.value = response.data.errors || ['Unknown error occurred']
-    emit('error', errors.value) // Emit error event with errors
-    return
-  } else if (response.status === 401) {
-    errors.value.message = 'Username or Password Wrong'
-    emit('error', errors.value) // Emit error event with errors
-    return
-  } else {
-    errors.value = [] // Clear error message if no error
-    emit('success') // Emit success event for successful login
-    setTimeout(() => {
-      router.push('/main')
-    }, 3000)
+  try {
+    const response = await userLogin(input.value)
+
+    if (response.status === 400 && response.data?.errors) {
+      errors.value = response.data.errors || ['Unknown error occurred']
+      emit('error', errors.value)
+    } else if (response.status === 401) {
+      errors.value.message = 'Username or Password Wrong'
+      emit('error', errors.value)
+    } else {
+      errors.value = []
+      emit('success')
+      setTimeout(() => {
+        router.push('/main')
+      }, 3000)
+    }
+  } catch (err) {
+    console.error('Error while logging in:', err)
+  } finally {
+    loading.value = false // End loading
   }
 }
 
@@ -130,7 +134,6 @@ const inputStyle = () => {
   return 'border-gradient-inner focus:outline-none focus:ring-2 focus:ring-soft-blue focus:border-transparent w-full'
 }
 
-// Clear error when user focuses on input field
 const clearError = () => {
   errors.value.message = ''
   errors.value.username = ''

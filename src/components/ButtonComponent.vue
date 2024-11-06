@@ -1,6 +1,6 @@
 <template>
   <button
-    :class="`${color} ${border}  ${text} px-4 py-3 rounded-[10px] w-fit flex justify-center items-center gap-3 hover:bg-dark-blue duration-300`"
+    :class="`${color} ${border}  ${text} px-4 py-3 rounded-[10px] w-fit flex justify-center items-center gap-3 hover:bg-dark-blue duration-300 hover:text-white-background hover:opacity-80`"
   >
     <img v-if="icon" :src="getImageUrl(icon)" class="w-6" />
     <h2 class="font-semibold">{{ name }}</h2>
