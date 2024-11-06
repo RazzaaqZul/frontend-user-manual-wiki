@@ -52,7 +52,7 @@ watch(
   async (newImg) => {
     if (newImg) {
       if (typeof newImg === 'string' && newImg.includes('images/user_manuals/')) {
-        cover.value = `${import.meta.env.VITE_BASE_URL}storage/${newImg}`
+        cover.value = `${import.meta.env.VITE_BASE_URL}/storage/${newImg}`
         selectedFileName.value = newImg.split('/').pop() // Ambil nama file dari path
       } else if (newImg instanceof File) {
         const base64Image = await fileToBase64(newImg)

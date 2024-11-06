@@ -129,8 +129,29 @@
           <button type="button" class="cancel-button">Cancel</button>
         </RouterLink>
 
-        <button type="submit" class="save-button">Save</button>
+        <!-- Conditionally render the ProgressSpinner or the Save button -->
+        <button
+          type="submit"
+          :class="[
+            'save-button',
+            'duration-300',
+            loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+          ]"
+          :disabled="loading"
+        >
+          <template v-if="loading">
+            <ProgressSpinner
+              style="width: 20px; height: 15px"
+              strokeWidth="8"
+              fill="transparent"
+              animationDuration=".9s"
+              aria-label="Custom ProgressSpinner"
+            />
+          </template>
+          <template v-else> Save </template>
+        </button>
       </div>
+
       <!-- <label v-if="errorMessage" class="text-red-custom">
         {{ errorMessage.title[0] }}
       </label> -->
@@ -169,6 +190,7 @@ import { useRouter } from 'vue-router'
 import PopUpSuccessful from '@/components/widgets/PopUpSuccessful.vue'
 import PopUpUnsuccessfull from '@/components/widgets/PopUpUnsuccessfull.vue'
 import { formattedMessage } from '@/helpers/FormattedMessageError'
+import ProgressSpinner from 'primevue/progressspinner'
 
 // Define props
 const props = defineProps({
@@ -262,54 +284,65 @@ const router = useRouter()
 const showSuccessPopup = ref(false)
 const showSuccessEditPopup = ref(false)
 const showErrorPopup = ref(false)
+const loading = ref(false) // Track if the form is submitting
 
 // Handle form submission
 const handleSubmit = async () => {
-  console.log(form.value) // Log the form value
+  loading.value = true // Show spinner when the form is being submitted
 
-  let response = []
-  if (!props.isUpdate) {
-    response = await storeUserManual(form.value) // Call the store service
-    if (response && response.status !== 201) {
-      // Check for errors in response
-      errorMessage.value = response.data.errors || ['Unknown error occurred'] // Assign error messages to errorMessage
-      // Show PopUp
-      showErrorPopup.value = true
-      errorMessage.value = response.data.errors || ['Unknown error occurred']
-      console.log(errorMessage.value)
-      setTimeout(() => {
-        showErrorPopup.value = false
-      }, 3000)
-    } else {
-      errorMessage.value = [] // Clear error message if no error
-      showSuccessPopup.value = true
-      setTimeout(() => {
-        showSuccessPopup.value = false
-        router.push(`/main/user-manuals/${response.data.data.user_manual_id}`)
-      }, 3000)
-    }
-  } else {
-    response = await updateUserManual(form.value, form.value.user_manual_id)
-    if (response && response.status !== 200) {
-      // Check for errors in response
-      console.log(response)
-      errorMessage.value.version = [response.data.errors || ['Unknown error occurred']] // Assign error messages to errorMessage
+  try {
+    console.log(form.value) // Log the form value
 
-      console.log(errorMessage.value.version)
-      showErrorPopup.value = true
-      setTimeout(() => {
-        showErrorPopup.value = false
-      }, 3000)
+    let response = []
+    if (!props.isUpdate) {
+      response = await storeUserManual(form.value) // Call the store service
+      if (response && response.status !== 201) {
+        // Check for errors in response
+        errorMessage.value = response.data.errors || ['Unknown error occurred'] // Assign error messages to errorMessage
+        // Show PopUp
+        showErrorPopup.value = true
+        setTimeout(() => {
+          showErrorPopup.value = false
+        }, 3000)
+      } else {
+        errorMessage.value = [] // Clear error message if no error
+        showSuccessPopup.value = true
+        setTimeout(() => {
+          showSuccessPopup.value = false
+          router.push(`/main/user-manuals/${response.data.data.user_manual_id}`)
+        }, 3000)
+      }
     } else {
-      errorMessage.value = [] // Clear error message if no error
-      showSuccessEditPopup.value = true
-      setTimeout(() => {
-        showSuccessEditPopup.value = false
-        router.push(`/main/user-manuals/${response.data.data.user_manual_id}`)
-      }, 3000)
+      response = await updateUserManual(form.value, form.value.user_manual_id)
+      if (response && response.status !== 200) {
+        // Check for errors in response
+        console.log(response)
+        errorMessage.value.version = [response.data.errors || ['Unknown error occurred']] // Assign error messages to errorMessage
+
+        console.log(errorMessage.value.version)
+        showErrorPopup.value = true
+        setTimeout(() => {
+          showErrorPopup.value = false
+        }, 3000)
+      } else {
+        errorMessage.value = [] // Clear error message if no error
+        showSuccessEditPopup.value = true
+        setTimeout(() => {
+          showSuccessEditPopup.value = false
+          router.push(`/main/user-manuals/${response.data.data.user_manual_id}`)
+        }, 3000)
+      }
     }
+  } catch (error) {
+    console.error(error) // Log any errors
+    errorMessage.value = ['An error occurred during submission.'] // Display general error message
+    showErrorPopup.value = true
+    setTimeout(() => {
+      showErrorPopup.value = false
+    }, 3000)
+  } finally {
+    loading.value = false // Hide spinner when submission is complete (either success or failure)
   }
-  console.log(response) // Log the response
 }
 
 // Count our content
@@ -460,11 +493,12 @@ const contentSize = () => {
 
 /* Save button */
 .save-button {
+  width: 10%;
   background-color: #0056d2;
   color: white;
   padding: 10px 20px;
   border-radius: 6px;
-  cursor: pointer;
+
   font-size: 14px;
   border: none;
   font-weight: bold;
