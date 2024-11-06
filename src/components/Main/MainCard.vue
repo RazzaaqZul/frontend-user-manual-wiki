@@ -34,7 +34,7 @@ const props = defineProps({
 })
 
 // Compute the main image URL
-const imageUrl = computed(() => `${import.meta.env.VITE_BASE_URL}storage/${props.img}`)
+const imageUrl = computed(() => `${import.meta.env.VITE_BASE_URL}/storage/${props.img}`)
 
 // Reactive property to track hover state
 const isHovered = ref(false)
