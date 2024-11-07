@@ -21,7 +21,6 @@ const props = defineProps({
 const formattedContent = computed(() => {
   if (!props.content) return ''
 
-  // Add Tailwind classes to the HTML content
   let content = props.content
 
   // Remove <span> tags but keep their innerHTML
@@ -29,44 +28,43 @@ const formattedContent = computed(() => {
 
   // Remove empty <h1>, <h2>, and <p> tags or tags with only <br>
   content = content
-    .replace(/<h1[^>]*>(\s*|<br\s*\/?>)<\/h1>/g, '') // Match empty <h1> tags
-    .replace(/<h2[^>]*>(\s*|<br\s*\/?>)<\/h2>/g, '') // Match empty <h2> tags
-    .replace(/<p[^>]*>(\s*|<br\s*\/?>)<\/p>/g, '') // Match empty <p> tags
+    .replace(/<h1[^>]*>(\s*|<br\s*\/?>)<\/h1>/g, '')
+    .replace(/<h2[^>]*>(\s*|<br\s*\/?>)<\/h2>/g, '')
+    .replace(/<p[^>]*>(\s*|<br\s*\/?>)<\/p>/g, '')
 
-  // Remove <strong> and <em> tags inside <h1> and <h2>
+  // Remove <strong> and <em> tags inside <h1> and <h2>, and generate id
   content = content
     .replace(/<h1[^>]*>(.*?)<\/h1>/g, (match, p1) => {
-      // Create an ID from the inner HTML, stripping tags and handling &nbsp;
-      const id = p1
+      let id = p1
         .replace(/<[^>]*>/g, '') // Remove all HTML tags
-        .replace(/&nbsp;$/g, '') // Remove &nbsp; only if it's at the end of the word
-        .replace(/&nbsp;/g, ' ') // Replace &nbsp; with a space if in the middle
+        .replace(/&nbsp;$/g, '') // Remove &nbsp; only if it's at the end
+        .replace(/&nbsp;/g, ' ') // Replace &nbsp; with space in the middle
         .replace(/\s+/g, '-') // Replace spaces with hyphens
-        .toLowerCase() // Convert to lowercase
+        .toLowerCase()
+        .replace(/^-+|-+$/g, '') // Remove leading and trailing hyphens
 
       return `<h1 id="${id}" class="text-2xl text-soft-blue p-1 border-b-2 border-b-grey-background my-10">${p1.replace(/<(strong|em)[^>]*>(.*?)<\/\1>/g, '$2').trim()}</h1>`
     })
     .replace(/<h2[^>]*>(.*?)<\/h2>/g, (match, p1) => {
-      // Create an ID from the inner HTML, stripping tags and handling &nbsp;
-      const id = p1
-        .replace(/<[^>]*>/g, '') // Remove all HTML tags
-        .replace(/&nbsp;$/g, '') // Remove &nbsp; only if it's at the end of the word
-        .replace(/&nbsp;/g, ' ') // Replace &nbsp; with a space if in the middle
-        .replace(/\s+/g, '-') // Replace spaces with hyphens
-        .toLowerCase() // Convert to lowercase
+      let id = p1
+        .replace(/<[^>]*>/g, '')
+        .replace(/&nbsp;$/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/\s+/g, '-')
+        .toLowerCase()
+        .replace(/^-+|-+$/g, '') // Remove leading and trailing hyphens
 
       return `<h2 id="${id}" class="text-xl text-soft-blue my-3">${p1.replace(/<(strong|em)[^>]*>(.*?)<\/\1>/g, '$2').trim()}</h2>`
     })
 
-  // Replace <p> tags and handle lists
+  // Apply Tailwind classes to other tags
   content = content
-    .replace(/<p[^>]*>(.*?)<\/p>/g, '<p class="text-md my-5">$1</p>') // For <p>
-    .replace(/<ol[^>]*>(.*?)<\/ol>/g, '<ol class="list-decimal pl-5 mx-10">$1</ol>') // For <ol>
-    .replace(/<ul[^>]*>(.*?)<\/ul>/g, '<ul class="list-disc my-2 mx-10">$1</ul>') // For <ul>
-    .replace(/<a([^>]*)>(.*?)<\/a>/g, '<a$1 class="text-soft-blue">$2</a>') // For <a>
-    .replace(/<li[^>]*>(.*?)<\/li>/g, '<li class="text-md">$1</li>') // For <li>
+    .replace(/<p[^>]*>(.*?)<\/p>/g, '<p class="text-md my-5">$1</p>')
+    .replace(/<ol[^>]*>(.*?)<\/ol>/g, '<ol class="list-decimal pl-5 mx-10">$1</ol>')
+    .replace(/<ul[^>]*>(.*?)<\/ul>/g, '<ul class="list-disc my-2 mx-10">$1</ul>')
+    .replace(/<a([^>]*)>(.*?)<\/a>/g, '<a$1 class="text-soft-blue">$2</a>')
+    .replace(/<li[^>]*>(.*?)<\/li>/g, '<li class="text-md">$1</li>')
 
-  // Add Tailwind classes to <img> tags
   content = content.replace(
     /<img[^>]*src="([^"]*)"[^>]*\/?>/g,
     '<img src="$1" class="my-5 mx-auto max-w-[40%] rounded-[2%] h-auto" alt="Image" />'

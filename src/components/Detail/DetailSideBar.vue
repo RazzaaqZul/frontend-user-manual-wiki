@@ -1,7 +1,9 @@
 <template>
   <section
     v-if="dataUserManual && dataUserManual.content"
-    class="w-[20%] h-screen shadow-inner-thick sticky top-0 py-24 overflow-y-auto"
+    class="w-[20%] h-screen shadow-inner-thick sticky top-0 py-24 overflow-y-auto scrollbar scrollbar-thumb-white-background"
+    ref="sidebarRef"
+    @scroll="handleManualScroll"
   >
     <div class="flex justify-between items-center cursor-pointer px-10">
       <h1>Contents</h1>
@@ -15,6 +17,7 @@
           v-for="subTopic in getSubTopics(dataUserManual.content)"
           :key="subTopic.user_manual_id"
           @click="setActiveSubTopic(subTopic.id)"
+          :ref="(el) => setItemRef(el, subTopic.id)"
         >
           <div
             :class="[
@@ -32,7 +35,7 @@
                     'active-text': isActive(subTopic.id),
                     'text-soft-blue': !isActive(subTopic.id)
                   },
-                  '' // static class
+                  'text-sm'
                 ]"
               >
                 {{ subTopic.title }}
@@ -44,6 +47,7 @@
               v-for="subSubTopic in subTopic.subTopics"
               :key="subSubTopic.id"
               @click.stop="setActiveSubSubTopic(subSubTopic.id, subTopic.id)"
+              :ref="(el) => setItemRef(el, subSubTopic.id)"
             >
               <div
                 :class="[
@@ -51,12 +55,14 @@
                     'active-item': isActiveSubSub(subSubTopic.id),
                     'non-active-item text-soft-blue': !isActiveSubSub(subSubTopic.id)
                   },
-                  'w-full px-10 duration-300  mt-1 py-1'
+                  'w-full px-10 duration-300 mt-1 py-1'
                 ]"
               >
-                <a :href="`#${subSubTopic.id}`">
-                  {{ subSubTopic.title }}
-                </a>
+                <a
+                  :href="`#${decodeHtmlEntities(subSubTopic.id)}`"
+                  v-html="decodeHtmlEntities(subSubTopic.title)"
+                  class="text-sm"
+                ></a>
               </div>
             </li>
           </ul>
@@ -68,40 +74,97 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { getSubTopics } from '@/helpers/GetSubTopics'
-
-/**
- * SubTopic = h1
- * SubSubTopic = h2
- */
 
 const props = defineProps({
   dataUserManual: {
     type: Object,
-    default: () => ({ content: [] }) // Default value jika data belum ada
+    default: () => ({ content: [] })
   }
 })
 
-console.log(props.dataUserManual)
-// Reactive properties untuk menyimpan subtopik dan sub-subtopik yang aktif
-const activeSubTopic = ref(null)
-const activeSubSubTopic = ref(null) // Tambahkan ini untuk menyimpan sub-subtopik yang aktif
+const sidebarRef = ref(null)
+const itemRefs = ref({})
+const isUserScrolling = ref(false)
+const scrollTimeout = ref(null)
 
-// Method untuk mengatur subtopik yang aktif
+// Function to handle manual scrolling
+const handleManualScroll = () => {
+  isUserScrolling.value = true
+
+  // Clear any existing timeout
+  if (scrollTimeout.value) {
+    clearTimeout(scrollTimeout.value)
+  }
+
+  // Reset the flag after a short delay
+  scrollTimeout.value = setTimeout(() => {
+    isUserScrolling.value = false
+  }, 150) // Adjust timeout as needed
+}
+
+const setItemRef = (el, id) => {
+  if (el) {
+    itemRefs.value[id] = el
+  }
+}
+
+const scrollToActive = (id) => {
+  // Don't auto-scroll if user is manually scrolling
+  if (isUserScrolling.value || !id || !itemRefs.value[id] || !sidebarRef.value) return
+
+  const element = itemRefs.value[id]
+  const sidebar = sidebarRef.value
+
+  // Calculate positions
+  const elementRect = element.getBoundingClientRect()
+  const sidebarRect = sidebar.getBoundingClientRect()
+
+  // Check if element is not fully visible in the sidebar
+  if (elementRect.top < sidebarRect.top || elementRect.bottom > sidebarRect.bottom) {
+    const scrollTop = element.offsetTop - sidebar.clientHeight / 2 + element.clientHeight / 2
+
+    sidebar.scrollTo({
+      top: scrollTop,
+      behavior: 'smooth'
+    })
+  }
+}
+
+const decodeHtmlEntities = (str) => {
+  const txt = document.createElement('textarea')
+  txt.innerHTML = str
+  return txt.value
+}
+
+const activeSubTopic = ref(null)
+const activeSubSubTopic = ref(null)
+
 const setActiveSubTopic = (id) => {
-  console.log(id)
+  // Temporarily disable auto-scroll when clicking links
+  isUserScrolling.value = true
   activeSubTopic.value = id
-  activeSubSubTopic.value = null // Reset sub-subtopik ketika subtopik diubah
+  activeSubSubTopic.value = null
+
+  // Reset the flag after a delay
+  setTimeout(() => {
+    isUserScrolling.value = false
+  }, 1000) // Longer delay for click actions
 }
 
 const setActiveSubSubTopic = (subSubId, subTopicId) => {
-  console.log(subSubId)
+  // Temporarily disable auto-scroll when clicking links
+  isUserScrolling.value = true
   activeSubSubTopic.value = subSubId
-  activeSubTopic.value = subTopicId // Tetapkan subtopik aktif berdasarkan sub-subtopik yang diklik
+  activeSubTopic.value = subTopicId
+
+  // Reset the flag after a delay
+  setTimeout(() => {
+    isUserScrolling.value = false
+  }, 1000) // Longer delay for click actions
 }
 
-// Method untuk mengecek apakah subtopik aktif
 const isActive = (id) => {
   return (
     activeSubTopic.value === id ||
@@ -115,77 +178,100 @@ const isActive = (id) => {
   )
 }
 
-// Method untuk mengecek apakah sub-subtopik aktif
 const isActiveSubSub = (id) => {
   return activeSubSubTopic.value === id
 }
 
 const currentSection = ref('')
 
+// Watch for changes in active sections and scroll them into view
+watch([activeSubTopic, activeSubSubTopic], ([newSubTopic, newSubSubTopic]) => {
+  // Only scroll if not user-initiated
+  if (!isUserScrolling.value) {
+    if (newSubSubTopic) {
+      scrollToActive(newSubSubTopic)
+    } else if (newSubTopic) {
+      scrollToActive(newSubTopic)
+    }
+  }
+})
+
 onMounted(() => {
+  let previousH2Id = ''
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          currentSection.value = entry.target.getAttribute('id')
-          const id = currentSection.value
+          const tagName = entry.target.tagName
+          const id = entry.target.getAttribute('id')
 
-          // Update activeSubTopic and activeSubSubTopic based on the current section
-          if (entry.target.tagName === 'H1') {
-            activeSubTopic.value = id // Set active subtopic for h1
-            console.log(`H1 ` + id)
-          } else if (entry.target.tagName === 'H2') {
-            activeSubSubTopic.value = id // Set active sub-subtopic for h2
-            activeSubTopic.value = id // Set the parent h1 as active subtopic
+          if (tagName === 'H1') {
+            activeSubTopic.value = id
+            activeSubSubTopic.value = null
+            scrollToActive(id)
+          } else if (tagName === 'H2') {
+            const activeH2Id = id || previousH2Id
+            if (activeH2Id) {
+              activeSubSubTopic.value = activeH2Id
+              activeSubTopic.value = entry.target.closest('h1')?.getAttribute('id')
+              scrollToActive(activeH2Id)
+            }
+            if (id) previousH2Id = id
           }
         }
       })
     },
     {
-      threshold: 0.6 // Element considered visible when 60% is visible
+      rootMargin: '0px 0px -80% 0px',
+      threshold: 0.1
     }
   )
 
-  // Observe all h1 and h2 tags
   document.querySelectorAll('h1, h2').forEach((section) => {
     observer.observe(section)
   })
 
-  // Check if there's an #id in the URL and scroll to the corresponding section
-  const urlHash = window.location.hash.substring(1) // Remove the # symbol
+  const urlHash = window.location.hash.substring(1)
   checkHashId(urlHash)
 })
 
-// Check #id
 const checkHashId = (urlHash) => {
-  console.log('Dijalankan')
-  console.log(urlHash)
   if (urlHash) {
     const targetSection = document.getElementById(urlHash)
     if (targetSection) {
-      targetSection.scrollIntoView({ behavior: 'smooth' }) // Smooth scroll to the section
+      targetSection.scrollIntoView({ behavior: 'smooth' })
       currentSection.value = urlHash
 
-      // Update the active subtopic or sub-subtopic based on the section ID
       if (targetSection.tagName === 'H1') {
-        activeSubTopic.value = urlHash // Set active subtopic for H1
+        activeSubTopic.value = urlHash
+        scrollToActive(urlHash)
       } else if (targetSection.tagName === 'H2') {
-        activeSubSubTopic.value = urlHash // Set active sub-subtopic for H2
-        activeSubTopic.value = urlHash // Set active parent topic for H2
+        activeSubSubTopic.value = urlHash
+        activeSubTopic.value = targetSection.closest('h1')?.getAttribute('id')
+        scrollToActive(urlHash)
       }
     }
   }
 }
 
-// Menggunakan watch untuk memantau perubahan pada currentSection
 watch(currentSection, (newValue) => {
-  console.log(newValue)
+  if (newValue && !isUserScrolling.value) {
+    scrollToActive(newValue)
+  }
+})
+
+// Cleanup on component unmount
+onUnmounted(() => {
+  if (scrollTimeout.value) {
+    clearTimeout(scrollTimeout.value)
+  }
 })
 </script>
 
 <style scoped>
 .active-item {
-  background-color: #f5f5d5; /* Light yellow background */
+  background-color: #f5f5d5;
   border-radius: 4px;
 }
 
@@ -194,16 +280,16 @@ watch(currentSection, (newValue) => {
 }
 
 .active-item-wrapper {
-  background-color: #f5f5d5; /* Full width yellow background */
+  background-color: #f5f5d5;
   width: 100%;
 }
 
 .active-text {
-  color: black; /* Black text for active */
+  color: black;
 }
 
 .text-soft-blue {
-  color: #3b82f6; /* Blue for non-active text */
+  color: #3b82f6;
 }
 
 .active-item:hover {

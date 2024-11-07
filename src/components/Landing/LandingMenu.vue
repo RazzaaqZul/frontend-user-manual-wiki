@@ -29,6 +29,7 @@
           :class="getBorderClasses(index) + ' border-grey-background'"
         >
           <CardMenu
+            :user_manual_id="item.user_manual_id"
             :title="item.title"
             :img="item.img"
             :short_desc="item.short_desc"
