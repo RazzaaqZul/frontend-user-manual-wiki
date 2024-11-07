@@ -25,7 +25,7 @@
                 'active-item': isActive(subTopic.id),
                 'non-active-item': !isActive(subTopic.id)
               },
-              'w-full px-5 py-2 mt-3 duration-300 font-semibold'
+              'w-full px-5 py-2 mt-3 duration-300 font-semibold z-50'
             ]"
           >
             <a :href="`#${subTopic.id}`">
@@ -35,7 +35,7 @@
                     'active-text': isActive(subTopic.id),
                     'text-soft-blue': !isActive(subTopic.id)
                   },
-                  'text-sm'
+                  'text-sm '
                 ]"
               >
                 {{ subTopic.title }}
@@ -55,7 +55,7 @@
                     'active-item': isActiveSubSub(subSubTopic.id),
                     'non-active-item text-soft-blue': !isActiveSubSub(subSubTopic.id)
                   },
-                  'w-full px-10 duration-300 mt-1 py-1'
+                  'w-full px-10 duration-300 mt-1 py-1 z-10'
                 ]"
               >
                 <a
@@ -273,6 +273,8 @@ onUnmounted(() => {
 .active-item {
   background-color: #f5f5d5;
   border-radius: 4px;
+  position: sticky;
+  top: -14vh;
 }
 
 .non-active-item {

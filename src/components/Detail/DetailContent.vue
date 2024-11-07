@@ -67,7 +67,7 @@ const formattedContent = computed(() => {
 
   content = content.replace(
     /<img[^>]*src="([^"]*)"[^>]*\/?>/g,
-    '<img src="$1" class="my-5 mx-auto max-w-[40%] rounded-[2%] h-auto" alt="Image" />'
+    '<img src="$1" class="my-5 mx-auto  rounded-[2%] h-auto" alt="Image"  />'
   )
 
   // Remove empty tags
