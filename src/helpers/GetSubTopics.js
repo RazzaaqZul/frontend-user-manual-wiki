@@ -1,8 +1,8 @@
 export const getSubTopics = (longText) => {
   const subTopics = []
   let currentH1 = null
+  const h2Counts = {} // Menyimpan jumlah kemunculan untuk setiap <h2>
 
-  // Regex untuk menangkap <h1> dan <h2> beserta isinya
   const sections = longText.match(/<h1.*?>.*?<\/h1>|<h2.*?>.*?<\/h2>/g)
 
   if (sections) {
@@ -11,31 +11,34 @@ export const getSubTopics = (longText) => {
       const isH2 = section.includes('<h2')
 
       if (isH1) {
-        // Ambil isi dari <span> dan hapus <span>, &nbsp;, serta tag lainnya
         const title = section
-          .replace(/<span[^>]*>(.*?)<\/span>/g, '$1') // Ambil isi dari <span> dan hapus <span>
-          .replace(/<[^>]*>/g, '') // Hapus tag HTML lainnya
-          .replace(/&nbsp;/g, ' ') // Hapus &nbsp; dan ganti dengan spasi
+          .replace(/<span[^>]*>(.*?)<\/span>/g, '$1')
+          .replace(/<[^>]*>/g, '')
+          .replace(/&nbsp;/g, ' ')
           .trim()
 
-        // Buat ID dari title (lowercase dan ganti spasi dengan '-')
         const id = title.toLowerCase().replace(/\s+/g, '-')
 
-        // Jika title tidak kosong, tambahkan ke subTopics
         if (title) {
           currentH1 = { id, title, subTopics: [] }
           subTopics.push(currentH1)
         }
       } else if (isH2 && currentH1) {
         const subTitle = section
-          .replace(/<[^>]*>/g, '') // Hapus tag HTML lainnya
-          .replace(/&nbsp;/g, ' ') // Hapus &nbsp; dan ganti dengan spasi
+          .replace(/<[^>]*>/g, '')
+          .replace(/&nbsp;/g, ' ')
           .trim()
 
-        // Buat ID dari subTitle (lowercase dan ganti spasi dengan '-')
-        const subId = subTitle.toLowerCase().replace(/\s+/g, '-')
+        let subId = subTitle.toLowerCase().replace(/\s+/g, '-')
 
-        // Jika subTitle tidak kosong, tambahkan ke subTopics
+        // Periksa apakah subId sudah ada di h2Counts
+        if (h2Counts[subId]) {
+          h2Counts[subId] += 1
+          subId = `${subId}-${h2Counts[subId]}` // Tambahkan angka untuk membuat ID unik
+        } else {
+          h2Counts[subId] = 1
+        }
+
         if (subTitle) {
           currentH1.subTopics.push({ id: subId, title: subTitle })
         }

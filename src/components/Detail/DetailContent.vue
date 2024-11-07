@@ -18,32 +18,33 @@ const props = defineProps({
 })
 
 // Computed property to format the HTML content
+// Computed property to format the HTML content
 const formattedContent = computed(() => {
   if (!props.content) return ''
 
   let content = props.content
+  const h2Counts = {} // Menyimpan jumlah kemunculan untuk setiap <h2>
 
-  // Remove <span> tags but keep their innerHTML
-  content = content.replace(/<span[^>]*>(.*?)<\/span>/g, '$1')
-
-  // Remove empty <h1>, <h2>, and <p> tags or tags with only <br>
   content = content
+    .replace(/<span[^>]*>(.*?)<\/span>/g, '$1')
     .replace(/<h1[^>]*>(\s*|<br\s*\/?>)<\/h1>/g, '')
     .replace(/<h2[^>]*>(\s*|<br\s*\/?>)<\/h2>/g, '')
     .replace(/<p[^>]*>(\s*|<br\s*\/?>)<\/p>/g, '')
 
-  // Remove <strong> and <em> tags inside <h1> and <h2>, and generate id
   content = content
     .replace(/<h1[^>]*>(.*?)<\/h1>/g, (match, p1) => {
       let id = p1
-        .replace(/<[^>]*>/g, '') // Remove all HTML tags
-        .replace(/&nbsp;$/g, '') // Remove &nbsp; only if it's at the end
-        .replace(/&nbsp;/g, ' ') // Replace &nbsp; with space in the middle
-        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/<[^>]*>/g, '')
+        .replace(/&nbsp;$/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/\s+/g, '-')
         .toLowerCase()
-        .replace(/^-+|-+$/g, '') // Remove leading and trailing hyphens
+        .replace(/^-+|-+$/g, '')
 
-      return `<h1 id="${id}" class="text-2xl text-soft-blue p-1 border-b-2 border-b-grey-background my-10">${p1.replace(/<(strong|em)[^>]*>(.*?)<\/\1>/g, '$2').trim()}</h1>`
+      // Jika ID hanya berupa angka, ubah menjadi null
+      if (/^\d+$/.test(id)) id = null
+
+      return `<h1 id="${id || ''}" class="text-2xl text-soft-blue p-1 border-b-2 border-b-grey-background my-10">${p1.replace(/<(strong|em)[^>]*>(.*?)<\/\1>/g, '$2').trim()}</h1>`
     })
     .replace(/<h2[^>]*>(.*?)<\/h2>/g, (match, p1) => {
       let id = p1
@@ -52,28 +53,34 @@ const formattedContent = computed(() => {
         .replace(/&nbsp;/g, ' ')
         .replace(/\s+/g, '-')
         .toLowerCase()
-        .replace(/^-+|-+$/g, '') // Remove leading and trailing hyphens
+        .replace(/^-+|-+$/g, '')
 
-      return `<h2 id="${id}" class="text-xl text-soft-blue my-3">${p1.replace(/<(strong|em)[^>]*>(.*?)<\/\1>/g, '$2').trim()}</h2>`
+      // Jika ID hanya berupa angka, ubah menjadi null
+      if (/^\d+$/.test(id)) id = null
+
+      // Periksa apakah id sudah ada di h2Counts dan tambahkan angka hanya jika id bukan null
+      if (id && h2Counts[id]) {
+        h2Counts[id] += 1
+        id = `${id}-${h2Counts[id]}`
+      } else if (id) {
+        h2Counts[id] = 1
+      }
+
+      return `<h2 id="${id || ''}" class="text-xl text-soft-blue my-3">${p1.replace(/<(strong|em)[^>]*>(.*?)<\/\1>/g, '$2').trim()}</h2>`
     })
 
-  // Apply Tailwind classes to other tags
   content = content
     .replace(/<p[^>]*>(.*?)<\/p>/g, '<p class="text-md my-5">$1</p>')
     .replace(/<ol[^>]*>(.*?)<\/ol>/g, '<ol class="list-decimal pl-5 mx-10">$1</ol>')
     .replace(/<ul[^>]*>(.*?)<\/ul>/g, '<ul class="list-disc my-2 mx-10">$1</ul>')
     .replace(/<a([^>]*)>(.*?)<\/a>/g, '<a$1 class="text-soft-blue">$2</a>')
     .replace(/<li[^>]*>(.*?)<\/li>/g, '<li class="text-md">$1</li>')
+    .replace(
+      /<img[^>]*src="([^"]*)"[^>]*\/?>/g,
+      '<img src="$1" class="my-5 mx-auto  rounded-[2%] h-auto" alt="Image" />'
+    )
+    .replace(/<[^/>]+><\/[^>]+>/g, '')
 
-  content = content.replace(
-    /<img[^>]*src="([^"]*)"[^>]*\/?>/g,
-    '<img src="$1" class="my-5 mx-auto  rounded-[2%] h-auto" alt="Image"  />'
-  )
-
-  // Remove empty tags
-  content = content.replace(/<[^/>]+><\/[^>]+>/g, '')
-
-  console.log(content)
   return content
 })
 </script>

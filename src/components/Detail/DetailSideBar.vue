@@ -1,7 +1,7 @@
 <template>
   <section
     v-if="dataUserManual && dataUserManual.content"
-    class="w-[20%] h-screen shadow-inner-thick sticky top-0 py-24 overflow-y-auto scrollbar scrollbar-thumb-white-background"
+    class="w-[20%] h-screen shadow-inner-thick sticky top-0 py-24 overflow-y-auto scrollbar scrollbar-thumb-green-custom"
     ref="sidebarRef"
     @scroll="handleManualScroll"
   >
@@ -111,12 +111,11 @@ const setItemRef = (el, id) => {
 }
 
 const scrollToActive = (id) => {
+  console.log('id ' + id)
   // Don't auto-scroll if user is manually scrolling
   if (isUserScrolling.value || !id || !itemRefs.value[id] || !sidebarRef.value) return
-
   const element = itemRefs.value[id]
   const sidebar = sidebarRef.value
-
   // Calculate positions
   const elementRect = element.getBoundingClientRect()
   const sidebarRect = sidebar.getBoundingClientRect()
@@ -124,7 +123,6 @@ const scrollToActive = (id) => {
   // Check if element is not fully visible in the sidebar
   if (elementRect.top < sidebarRect.top || elementRect.bottom > sidebarRect.bottom) {
     const scrollTop = element.offsetTop - sidebar.clientHeight / 2 + element.clientHeight / 2
-
     sidebar.scrollTo({
       top: scrollTop,
       behavior: 'smooth'
@@ -186,6 +184,7 @@ const currentSection = ref('')
 
 // Watch for changes in active sections and scroll them into view
 watch([activeSubTopic, activeSubSubTopic], ([newSubTopic, newSubSubTopic]) => {
+  console.log(newSubSubTopic)
   // Only scroll if not user-initiated
   if (!isUserScrolling.value) {
     if (newSubSubTopic) {
