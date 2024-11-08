@@ -1,7 +1,7 @@
 <template>
   <section
     :class="[
-      'w-[35%] h-[50vh] bg-white-background drop-shadow-2xl flex flex-col justify-center items-center rounded-3xl'
+      'w-[35%] h-[60vh] bg-white-background drop-shadow-2xl flex flex-col justify-center items-center rounded-3xl'
     ]"
   >
     <div class="w-full h-[60%] bg-red-error rounded-3xl flex justify-center items-center">
@@ -11,7 +11,7 @@
       class="w-full h-[40%] bg-white-background rounded-3xl flex flex-col items-center gap-2 pt-5"
     >
       <h1 class="text-red-error font-bold text-3xl">{{ title }}</h1>
-      <p class="text-center text-md">{{ message }}</p>
+      <p class="text-center text-md mx-9">{{ message }}</p>
     </div>
   </section>
 </template>

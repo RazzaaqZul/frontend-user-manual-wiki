@@ -6,7 +6,7 @@
 import UserMain from '@/components/Auth/User/UserMain.vue'
 import { showUsers } from '@/services/modules/UserService'
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { onBeforeRouteLeave, useRouter } from 'vue-router'
 
 const router = useRouter()
 let dataUsers = ref([])
@@ -17,5 +17,18 @@ onMounted(async () => {
     router.push('/login')
   }
   dataUsers.value = response
+})
+
+onBeforeRouteLeave((to, from, next) => {
+  // Show a confirmation dialog
+  const answer = confirm('Perubahan anda tidak akan disimpan')
+
+  if (answer) {
+    // Allow navigation
+    next()
+  } else {
+    // Cancel navigation
+    next(false)
+  }
 })
 </script>

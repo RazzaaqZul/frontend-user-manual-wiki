@@ -93,7 +93,7 @@ export const destroyUserManual = async (id) => {
       }
     }
     const response = await axios.delete(`/api/user-manuals/${id}`, config)
-    return response.data.data
+    return response
   } catch (err) {
     console.log(err.response.data)
   }

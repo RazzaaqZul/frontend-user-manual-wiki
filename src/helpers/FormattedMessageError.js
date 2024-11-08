@@ -4,7 +4,9 @@ export const formattedMessage = (errorMessage) => {
   console.log(errorMessage)
 
   const errorFields = Object.keys(errorMessage).filter((key) => errorMessage[key].length > 0)
-
+  if (errorMessage.update && Object.keys(errorMessage).length === 1) {
+    return errorMessage.update
+  }
   if (errorFields.length > 0) {
     const fieldNames = errorFields
       .map((field) => {
@@ -21,6 +23,12 @@ export const formattedMessage = (errorMessage) => {
             return 'judul'
           case 'version':
             return 'versi'
+          case 'username':
+            return 'username'
+          case 'password':
+            return 'password'
+          case 'email':
+            return 'email'
           default:
             return field
         }

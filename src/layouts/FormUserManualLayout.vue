@@ -186,7 +186,7 @@ import { storeUserManual, updateUserManual } from '../services/modules/UserManua
 import FormTextEditor from '../components/Form/FormTextEditor.vue'
 import FormImageInput from '../components/Form/FormImageInput.vue'
 import Select from 'primevue/select'
-import { useRouter } from 'vue-router'
+import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import PopUpSuccessful from '@/components/widgets/PopUpSuccessful.vue'
 import PopUpUnsuccessfull from '@/components/widgets/PopUpUnsuccessfull.vue'
 import { formattedMessage } from '@/helpers/FormattedMessageError'
@@ -285,6 +285,24 @@ const showSuccessPopup = ref(false)
 const showSuccessEditPopup = ref(false)
 const showErrorPopup = ref(false)
 const loading = ref(false) // Track if the form is submitting
+const isLeave = ref(false)
+
+onBeforeRouteLeave((to, from, next) => {
+  // Show a confirmation dialog
+  if (!isLeave.value) {
+    const answer = confirm('Perubahan anda tidak akan disimpan')
+    if (answer) {
+      // Allow navigation
+      next()
+    } else {
+      // Cancel navigation
+      next(false)
+    }
+  }
+  if (isLeave.value) {
+    return next() // Proceed with the navigation
+  }
+})
 
 // Handle form submission
 const handleSubmit = async () => {
@@ -301,12 +319,15 @@ const handleSubmit = async () => {
         errorMessage.value = response.data.errors || ['Unknown error occurred'] // Assign error messages to errorMessage
         // Show PopUp
         showErrorPopup.value = true
+        isLeave.value = true
         setTimeout(() => {
+          isLeave.value = false
           showErrorPopup.value = false
         }, 3000)
       } else {
         errorMessage.value = [] // Clear error message if no error
         showSuccessPopup.value = true
+        isLeave.value = true
         setTimeout(() => {
           showSuccessPopup.value = false
           router.push(`/main/user-manuals/${response.data.data.user_manual_id}`)
@@ -326,15 +347,17 @@ const handleSubmit = async () => {
         } else {
           errorMessage.value = response.data.errors
         }
-
+        isLeave.value = true
         console.log(errorMessage.value.version)
         showErrorPopup.value = true
         setTimeout(() => {
+          isLeave.value = false
           showErrorPopup.value = false
         }, 3000)
       } else {
         errorMessage.value = [] // Clear error message if no error
         showSuccessEditPopup.value = true
+        isLeave.value = true
         setTimeout(() => {
           showSuccessEditPopup.value = false
           router.push(`/main/user-manuals/${response.data.data.user_manual_id}`)
@@ -366,6 +389,7 @@ const contentSize = () => {
   }
 }
 </script>
+
 <style scoped>
 .popup-center {
   position: fixed;

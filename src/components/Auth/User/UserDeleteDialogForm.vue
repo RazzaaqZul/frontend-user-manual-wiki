@@ -33,8 +33,15 @@
 
         <!-- Confirmation Checkbox -->
         <div class="flex items-center gap-4 mb-8">
-          <Checkbox v-model="isConfirmed" />
-          <label class="text-sm">I am sure I want to delete this user</label>
+          <input
+            type="checkbox"
+            id="confirmationCheckbox"
+            v-model="isConfirmed"
+            class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 duration-300"
+          />
+          <label for="confirmationCheckbox" class="text-sm"
+            >I am sure I want to delete this user</label
+          >
         </div>
 
         <div class="flex justify-end gap-2">
@@ -60,7 +67,6 @@ import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
 import InputText from 'primevue/inputtext'
 import ProgressSpinner from 'primevue/progressspinner'
-import Checkbox from 'primevue/checkbox'
 import { useRouter } from 'vue-router'
 
 // Define props
