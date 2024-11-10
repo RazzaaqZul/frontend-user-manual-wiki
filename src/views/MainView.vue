@@ -12,6 +12,7 @@
     <div
       class="flex flex-col justify-start items-center w-fit h-full min-w-[60%] max-w-[60%] min-h-screen"
     >
+      <!-- Header Section -->
       <section class="flex justify-between gap-[8%] items-center w-full my-7">
         <div class="absolute left-[3%] flex justify-center items-center gap-5">
           <div
@@ -27,10 +28,15 @@
             />
           </RouterLink>
         </div>
-        <SearchComponent @update:searchResults="searchResults = $event" class="basis-[65%]" />
+        <SearchComponent
+          @update:searchResults="handleSearchResults"
+          @search-loading="isSearchLoading = $event"
+          class="basis-[65%]"
+        />
         <ButtonLogin />
       </section>
 
+      <!-- Title and Controls Section -->
       <section
         class="flex justify-between items-center border-b-[3px] border-grey-background mb-5 pb-1 w-full"
       >
@@ -49,36 +55,87 @@
         </div>
       </section>
 
-      <!-- list user manual -->
-      <section v-if="searchResults" class="w-full">
-        <MainMenu :selectedCategory="selectedCategory" :searchResults="searchResults" />
+      <!-- Loading State -->
+      <div v-if="isSearchLoading" class="w-full flex justify-center items-center min-h-[50vh]">
+        <ProgressSpinner />
+      </div>
+
+      <!-- Search Results -->
+      <section v-else-if="isSearchActive" class="w-full">
+        <!-- Search Results Count -->
+        <div v-if="route.query.search" class="flex flex-col justify-start gap-2 mb-5">
+          <template v-if="actualMatchCount > 0">
+            <h1 class="text-dark-blue text-xl font-semibold">
+              {{ actualMatchCount }} results found
+            </h1>
+            <h2 class="text-grey-word">
+              Create the page
+              <span class="text-soft-blue font-semibold">"{{ route.query.search }}"</span>
+              on this wiki! See also the search results found.
+            </h2>
+          </template>
+          <template v-else>
+            <SearchNotFound />
+          </template>
+        </div>
+
+        <!-- Search Results List -->
+        <div class="flex flex-col gap-5">
+          <div v-for="(result, index) in searchResults" :key="index" class="w-full">
+            <SearchMain :user_manual="result" @search-result="handleSearchMatch(index, $event)" />
+          </div>
+        </div>
       </section>
-      <section v-else>
-        <SearchNotFound />
+
+      <!-- Main Content -->
+      <section v-else class="w-full">
+        <MainMenu :selectedCategory="selectedCategory" />
       </section>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import ButtonLogin from '@/components/ButtonLogin.vue'
 import MainMenu from '@/components/Main/MainMenu.vue'
 import MainSideBar from '@/components/Main/MainSideBar.vue'
 import SearchComponent from '@/components/Search/SearchBar.vue'
-import { ref, computed, onMounted } from 'vue'
-import MainButtonCreate from '../components/Main/MainButtonCreate.vue'
+import MainButtonCreate from '@/components/Main/MainButtonCreate.vue'
 import MainButtonTrash from '@/components/Main/MainButtonTrash.vue'
 import FilterPopOver from '@/components/Filter/FilterPopOver.vue'
 import UserButton from '@/components/Auth/User/UserButton.vue'
 import SearchNotFound from '@/components/Search/SearchNotFound.vue'
-import { validateToken } from '@/services/modules/UserService' // Adjust import as necessary
+import SearchMain from '@/components/Search/SearchMain.vue'
+import ProgressSpinner from 'primevue/progressspinner'
+import { validateToken } from '@/services/modules/UserService'
 
+const route = useRoute()
 const sidebarOpen = ref(false)
 const selectedCategory = ref(null)
-const searchResults = ref([]) // Reactive property for search results
-const userRole = ref(null) // Placeholder for user role
+const searchResults = ref([])
+const searchMatchMap = ref(new Map())
+const isSearchLoading = ref(false)
+const userRole = ref(null)
 
-// Fetch user role function
+// Compute whether search is active
+const isSearchActive = computed(() => {
+  return !!route.query.search || searchResults.value.length > 0
+})
+
+// Compute actual match count
+const actualMatchCount = computed(() => {
+  return Array.from(searchMatchMap.value.values()).filter(Boolean).length
+})
+
+// Role-based computed properties
+const isAdmin = computed(() => userRole.value === 'admin')
+const canCreate = computed(
+  () => userRole.value === 'admin' || userRole.value === 'technical_writer'
+)
+
+// Fetch user role
 const fetchUserRole = async () => {
   const getToken = localStorage.getItem('token')
   const token = getToken ? JSON.parse(getToken).token : null
@@ -86,29 +143,33 @@ const fetchUserRole = async () => {
   if (token) {
     const userData = await validateToken(token)
     if (userData) {
-      userRole.value = userData.role // Store the user's role
+      userRole.value = userData.role
     }
   }
 }
 
-// Call fetchUserRole on component mount
-onMounted(async () => {
-  await fetchUserRole()
-})
+// Handle search results from SearchComponent
+const handleSearchResults = (results) => {
+  searchResults.value = results
+  searchMatchMap.value = new Map() // Reset match map
+}
 
-// Computed properties for role checks
-const isAdmin = computed(() => userRole.value === 'admin')
-const canCreate = computed(
-  () => userRole.value === 'admin' || userRole.value === 'technical_writer'
-)
+// Handle individual search matches
+const handleSearchMatch = (index, hasMatch) => {
+  searchMatchMap.value.set(index, hasMatch)
+}
 
-// Toggle sidebar state
+// Toggle sidebar
 const toggleSidebar = () => {
   sidebarOpen.value = !sidebarOpen.value
 }
 
-// Handle the selected category from FilterPopOver
+// Handle category selection
 const onCategorySelected = (category) => {
-  selectedCategory.value = category.value // Store the selected category
+  selectedCategory.value = category.value
 }
+
+onMounted(async () => {
+  await fetchUserRole()
+})
 </script>
