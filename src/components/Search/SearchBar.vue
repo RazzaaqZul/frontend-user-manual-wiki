@@ -6,8 +6,7 @@
         type="text"
         placeholder="Cari Petunjuk"
         class="flex-grow outline-none text-gray-500"
-        @input="handleSearch"
-        @keyup.enter="performSearch"
+        @keyup.enter="updateUrlAndSearch"
       />
       <img
         src="@/assets/icon/icon-search.png"
@@ -29,7 +28,6 @@ const route = useRoute()
 const emit = defineEmits(['update:searchResults', 'search-loading'])
 
 const searchQuery = ref('')
-let debounceTimeout = null
 
 // Initialize search query from URL on component mount
 onMounted(() => {
@@ -39,26 +37,6 @@ onMounted(() => {
     performSearch()
   }
 })
-
-// Handle input with debouncing
-const handleSearch = () => {
-  if (debounceTimeout) clearTimeout(debounceTimeout)
-
-  if (!searchQuery.value) {
-    updateUrlAndSearch()
-    return
-  }
-
-  debounceTimeout = setTimeout(() => {
-    // Don't auto-search, just update URL
-    router.push({
-      query: {
-        ...route.query,
-        search: searchQuery.value || undefined
-      }
-    })
-  }, 300)
-}
 
 // Update URL and perform search
 const updateUrlAndSearch = async () => {

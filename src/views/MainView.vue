@@ -42,7 +42,13 @@
       >
         <h1 class="font-bold text-[30px] text-soft-blue">Halaman Utama</h1>
         <div class="flex justify-center items-center gap-2">
-          <FilterPopOver @categorySelected="onCategorySelected" />
+          <FilterPopOver
+            @categorySelected="onCategorySelected"
+            :class="[
+              'animate__animated',
+              !route.query.search ? 'animate__fadeInRight' : 'animate__fadeOutRight'
+            ]"
+          />
           <RouterLink to="/main/user-manuals/create" v-if="canCreate">
             <MainButtonCreate />
           </RouterLink>
