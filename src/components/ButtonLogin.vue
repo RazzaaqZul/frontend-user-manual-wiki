@@ -1,13 +1,15 @@
 <template>
   <button
     @click="toggle"
-    class="bg-white-background shadow-lg drop-shadow-lg w-fit flex justify-center items-center gap-3 rounded-3xl py-2 px-6 hover:scale-110 duration-150"
+    class="xl:bg-white-background xl:shadow-lg drop-shadow-lg w-fit flex justify-center items-center gap-3 rounded-3xl py-2 px-6 hover:scale-110 duration-150"
   >
     <div class="bg-gradient-color w-fit rounded-full p-2">
       <img src="../assets/icon/icon-user.png" :alt="'logo_user'" class="w-5" />
     </div>
-    <h1 class="font-normal text-grey-word capitalize">{{ userRole || 'Log In' }}</h1>
-    <img src="../assets/icon/icon-arrow-right.png" :alt="'logo_user'" class="w-4" />
+    <h1 class="font-normal text-grey-word capitalize hidden xl:block">
+      {{ userRole || 'Log In' }}
+    </h1>
+    <img src="../assets/icon/icon-arrow-right.png" :alt="'logo_user'" class="w-4 hidden xl:block" />
   </button>
 
   <Popover ref="popoverRef" class="ml-[30px]">

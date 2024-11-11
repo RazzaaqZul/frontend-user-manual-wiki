@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'scrollbar scrollbar-thumb-white-background w-[22%] bg-dark-blue overflow-y-auto h-screen fixed z-50 duration-1000',
+      'scrollbar scrollbar-thumb-white-background w-[100%] sm:w-[50%] md:w-[50%] lg:w-[24%] xl:w-[22%] bg-dark-blue overflow-y-auto h-screen fixed z-50 duration-1000',
       sidebarOpen ? 'translate-x-0' : '-translate-x-full'
     ]"
   >

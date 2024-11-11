@@ -1,7 +1,7 @@
 <template>
   <RouterLink :to="`/main/user-manuals/${user_manual_id}`">
     <section
-      class="hover:bg-gradient-color-card rounded-xl w-[300px] h-[180px] p-10 hover:text-white-background gap-3 duration-300 border-[1px] shadow-lg text-blue-button relative"
+      class="hover:bg-gradient-color-card rounded-xl w-[300px] md:w-[280px] lg:w-[261px] xl:w-[300px] h-[180px] p-10 hover:text-white-background gap-3 duration-300 border-[1px] shadow-lg text-blue-button relative"
       @mouseover="isHovered = true"
       @mouseleave="isHovered = false"
     >

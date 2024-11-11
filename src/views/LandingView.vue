@@ -5,13 +5,15 @@ import LandingMenu from '@/components/Landing/LandingMenu.vue'
 </script>
 
 <template>
-  <div class="bg-white-background flex flex-col min-h-screen relative">
-    <LandingBackground></LandingBackground>
-
-    <LandingMenu></LandingMenu>
-
-    <footer class="mt-auto w-full">
+  <section
+    class="flex flex-col justify-center items-center gap-[41rem] sm:gap-[23rem] md:gap-[120px] overflow-hidden w-full h-full"
+  >
+    <div class="bg-white-background flex flex-col relative w-full">
+      <LandingBackground />
+      <LandingMenu />
+    </div>
+    <footer class="w-full h-full bg-red-custom">
       <FooterComponent />
     </footer>
-  </div>
+  </section>
 </template>

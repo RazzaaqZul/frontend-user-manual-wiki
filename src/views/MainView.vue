@@ -1,30 +1,32 @@
 <template>
-  <nav class="bg-yellow-custom">
+  <nav class="">
     <MainSideBar :sidebarOpen="sidebarOpen" @update:sidebarOpen="sidebarOpen = $event" />
   </nav>
 
   <div
     :class="[
       'flex justify-center items-center min-h-screen duration-300',
-      sidebarOpen ? 'translate-x-[5%]' : ''
+      sidebarOpen ? ' md:translate-x-[12%] xl:translate-x-[8.5%] 2xl:translate-x-[4%]' : ''
     ]"
   >
     <div
-      class="flex flex-col justify-start items-center w-fit h-full min-w-[60%] max-w-[60%] min-h-screen"
+      class="flex flex-col justify-start items-center w-fit h-full min-w-[80%] md:min-w-[72%] lg:min-w-[75%] xl:min-w-[71%] 2xl:min-w-[60%] max-w-[60%] min-h-screen"
     >
-      <!-- Header Section -->
-      <section class="flex justify-between gap-[8%] items-center w-full my-7">
+      <!-- Header Section XL -->
+      <section class="xl:flex justify-between gap-[8%] items-center w-full my-7 hidden">
         <div class="absolute left-[3%] flex justify-center items-center gap-5">
+          <!-- SideBar -->
           <div
             class="w-fit bg-soft-blue p-3 rounded-full shadow-lg drop-shadow-lg cursor-pointer"
             @click="toggleSidebar"
           >
             <img src="../assets/icon/icon-humberger-bar.png" class="w-5" />
           </div>
+          <!-- Logo BPJS Ketenagakerjaan -->
           <RouterLink to="/">
             <img
               src="../assets/icon/logo-bpjamsostek-color.png"
-              class="w-36 cursor-pointer hover:scale-105 duration-200"
+              class="w-36 hidden xl:block xl:w-20 2xl:w-36 cursor-pointer hover:scale-105 duration-200"
             />
           </RouterLink>
         </div>
@@ -36,16 +38,41 @@
         <ButtonLogin />
       </section>
 
+      <!-- Header Section SM, MD, LG -->
+      <section class="flex flex-col justify-center items-center w-full my-7 gap-5 xl:hidden">
+        <div class="w-full flex justify-center gap-2 md:gap-10 items-center">
+          <!-- SideBar -->
+          <div
+            class="w-fit bg-soft-blue p-3 rounded-full shadow-lg drop-shadow-lg cursor-pointer"
+            @click="toggleSidebar"
+          >
+            <img src="../assets/icon/icon-humberger-bar.png" class="w-5" />
+          </div>
+          <!-- Logo BPJS Ketenagakerjaan -->
+          <RouterLink to="/">
+            <img
+              src="../assets/icon/logo-bpjamsostek-color.png"
+              class="w-56 md:w-56 cursor-pointer hover:scale-105 duration-200"
+            />
+          </RouterLink>
+          <ButtonLogin />
+        </div>
+        <SearchComponent
+          @update:searchResults="handleSearchResults"
+          @search-loading="isSearchLoading = $event"
+          class="w-full"
+        />
+      </section>
       <!-- Title and Controls Section -->
       <section
-        class="flex justify-between items-center border-b-[3px] border-grey-background mb-5 pb-1 w-full"
+        class="flex flex-col justify-start md:flex-row md:justify-between items-center border-b-[3px] border-grey-background mb-5 pb-1 w-full"
       >
-        <h1 class="font-bold text-[30px] text-soft-blue">Halaman Utama</h1>
-        <div class="flex justify-center items-center gap-2">
+        <h1 class="w-full basis-[70%] font-bold text-[30px] text-soft-blue">Halaman Utama</h1>
+        <div class="w-full flex flex-wrap justify-end items-center gap-2">
           <FilterPopOver
             @categorySelected="onCategorySelected"
             :class="[
-              'animate__animated',
+              'animate__animated cursor-pointer',
               !route.query.search ? 'animate__fadeInRight' : 'animate__fadeOutRight'
             ]"
           />

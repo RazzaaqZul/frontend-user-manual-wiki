@@ -1,7 +1,9 @@
 <template>
-  <div class="flex justify-center items-center absolute z-20 top-80 left-0 w-full h-60">
+  <div
+    class="flex justify-center items-center absolute z-20 top-[40vh] sm:top-[17rem] md:top-[18rem] lg:top-[17rem] left-0 w-full"
+  >
     <div
-      class="bg-white-background rounded-xl w-[90%] md:w-[75%] h-80 shadow-2xl p-4 flex justify-center items-center"
+      class="bg-white-background rounded-xl h-[49rem] sm:h-[29rem] md:h-[23rem] w-[90%] md:w-[75%] shadow-2xl p-4 flex justify-center items-center"
     >
       <!-- Loading Spinner -->
       <LoadingSpinner v-if="fetchingUserManuals" />
@@ -29,7 +31,7 @@
           :class="getBorderClasses(index) + ' border-grey-background'"
         >
           <CardMenu
-            :user_manual_id="item.user_manual_id"
+            :user_manual_id="String(item.user_manual_id)"
             :title="item.title"
             :img="item.img"
             :short_desc="item.short_desc"
@@ -48,7 +50,7 @@
         name="See all help topics"
         color="bg-soft-blue"
         icon="button-next.png"
-        class="absolute bottom-[-90px] left-1/2 transform -translate-x-1/2 mb-4 z-50"
+        class="absolute top-[48rem] sm:top-[28rem] md:top-[22rem] left-1/2 transform -translate-x-1/2 mb-4 z-50"
       />
     </RouterLink>
   </div>

@@ -1,9 +1,6 @@
 <template>
   <!-- Container for main content -->
-  <div
-    v-if="!isLoading"
-    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-fit gap-4 content-center"
-  >
+  <div v-if="!isLoading" class="grid md:grid-cols-2 lg:grid-cols-3 w-full gap-4">
     <!-- Display each item -->
     <div
       class="items-center justify-center flex w-full"
