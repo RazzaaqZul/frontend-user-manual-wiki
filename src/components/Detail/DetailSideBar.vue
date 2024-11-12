@@ -1,14 +1,21 @@
 <template>
   <section
     v-if="dataUserManual && dataUserManual.content"
-    class="w-[20%] h-screen shadow-inner-thick sticky top-0 py-24 overflow-y-auto scrollbar scrollbar-thumb-green-custom"
+    :class="[
+      'bg-white-background lg:w-[100%] h-screen shadow-inner-thick sticky top-0 py-24 overflow-y-auto scrollbar scrollbar-thumb-green-custom duration-500 ',
+      sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+    ]"
     ref="sidebarRef"
     @scroll="handleManualScroll"
   >
-    <div class="flex justify-between items-center cursor-pointer px-10">
+    <div class="flex md:relative justify-between items-center cursor-pointer px-10">
       <h1>Contents</h1>
       <div class="bg-soft-blue rounded-full p-1 hover:scale-110 duration-300">
-        <img src="../../assets/icon/icon-x.png" class="w-4" />
+        <img
+          src="../../assets/icon/icon-x.png"
+          class="w-4"
+          @click="$emit('update:sidebarOpen', !sidebarOpen)"
+        />
       </div>
     </div>
     <div class="mt-5">
@@ -62,6 +69,7 @@
                   :href="`#${decodeHtmlEntities(subSubTopic.id)}`"
                   v-html="decodeHtmlEntities(subSubTopic.title)"
                   class="text-sm"
+                  @click="handleLinkClick"
                 ></a>
               </div>
             </li>
@@ -81,7 +89,8 @@ const props = defineProps({
   dataUserManual: {
     type: Object,
     default: () => ({ content: [] })
-  }
+  },
+  sidebarOpen: Boolean
 })
 
 const sidebarRef = ref(null)
@@ -111,7 +120,7 @@ const setItemRef = (el, id) => {
 }
 
 const scrollToActive = (id) => {
-  console.log('id ' + id)
+  // console.log('id ' + id)
   // Don't auto-scroll if user is manually scrolling
   if (isUserScrolling.value || !id || !itemRefs.value[id] || !sidebarRef.value) return
   const element = itemRefs.value[id]
@@ -184,7 +193,7 @@ const currentSection = ref('')
 
 // Watch for changes in active sections and scroll them into view
 watch([activeSubTopic, activeSubSubTopic], ([newSubTopic, newSubSubTopic]) => {
-  console.log(newSubSubTopic)
+  // console.log(newSubSubTopic)
   // Only scroll if not user-initiated
   if (!isUserScrolling.value) {
     if (newSubSubTopic) {
@@ -266,6 +275,15 @@ onUnmounted(() => {
     clearTimeout(scrollTimeout.value)
   }
 })
+
+const emit = defineEmits(['update:sidebarOpen']) // Define the emit function
+
+// Function to handle the click and emit the event
+const handleLinkClick = () => {
+  if (window.innerWidth < 1024) {
+    emit('update:sidebarOpen', props.sidebarOpen.value)
+  }
+}
 </script>
 
 <style scoped>

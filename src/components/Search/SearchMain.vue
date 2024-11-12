@@ -1,9 +1,10 @@
 <template>
-  {{ console.log(user_manual.user_manual_id) }}
+  {{ console.log(user_manual) }}
   <section
     class="hover:bg-grey-input duration-200 cursor-pointer p-2 rounded-xl w-full"
     @click="goToUserManual(searchResults)"
   >
+    {{ console.log(searchResults) }}
     <div v-if="searchResults">
       <div class="flex justify-start items-center gap-2 text-soft-blue">
         <!-- Title with optional highlight -->
@@ -210,16 +211,17 @@ watchEffect(() => {
 
 const router = useRouter()
 
-// Modified to keep original heading text for slug
 function generateSlug(text) {
   if (!text) return ''
-  return encodeURIComponent(text)
+  return text
+    .toLowerCase() // Convert to lowercase
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
 }
-
 // Method to navigate to the user manual
 function goToUserManual(searchResults) {
   // Use h2 if available, otherwise fallback to h1
   const heading = searchResults.h2 || searchResults.h1
+  console.log(heading)
   const slug = generateSlug(heading)
   router.push(`/main/user-manuals/${props.user_manual.user_manual_id}#${slug}`)
 }
