@@ -12,7 +12,7 @@
         src="@/assets/icon/icon-search.png"
         alt="Search"
         class="w-5 h-5 cursor-pointer"
-        @click="performSearch"
+        @click="updateUrlAndSearch"
       />
     </div>
   </div>
