@@ -432,8 +432,15 @@ const contentSize = () => {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: start;
+  align-items: flex-start;
   gap: 20px;
+}
+
+@media (max-width: 640px) {
+  /* Assuming 640px is the breakpoint for sm */
+  .form-group {
+    flex-direction: column;
+  }
 }
 
 /* Labels for form fields */

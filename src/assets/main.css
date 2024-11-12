@@ -45,3 +45,37 @@ body {
   border-radius: inherit;
   padding: 15px;
 }
+
+/* Apply styles to table rows for smaller screens */
+table tbody tr {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb; /* Customize as needed */
+}
+
+table tbody tr td {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+table tbody tr td::before {
+  content: attr(data-label);
+  font-weight: bold;
+  color: #4a5568; /* Adjust to match your theme */
+}
+
+/* For larger screens, revert back to table layout */
+@media (min-width: 1024px) {
+  table tbody tr {
+    display: table-row;
+  }
+  table tbody tr td {
+    display: table-cell;
+    padding: 15px;
+  }
+  table tbody tr td::before {
+    content: none;
+  }
+}

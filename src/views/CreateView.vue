@@ -1,5 +1,5 @@
 <template>
-  <div class="px-[15%]">
+  <div class="px-[2%] sm:px-[10%] md:px-[10%] lg:px-[15%]">
     <NavbarComponent />
     <h2 class="text-2xl font-bold text-soft-blue border-b-4 border-grey-input py-5 mb-5">
       Create User Manual

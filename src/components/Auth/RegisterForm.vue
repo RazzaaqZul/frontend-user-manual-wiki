@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[35%] relative h-full">
+  <div class="w-[70%] sm:w-[80%] md:w-[70%] lg:w-[35%] relative h-full">
     <transition name="slide" mode="out-in" class="h-full">
       <section v-if="currentSlide === 1" :key="1">
         <div

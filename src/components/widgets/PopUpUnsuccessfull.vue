@@ -1,7 +1,7 @@
 <template>
   <section
     :class="[
-      'w-[35%] h-[60vh] bg-white-background drop-shadow-2xl flex flex-col justify-center items-center rounded-3xl'
+      'w-[80%] h-[60%] sm:w-[70%] md:w-[60%] md:h-[70%] lg:w-[35%] lg:h-[60%] bg-white-background drop-shadow-2xl flex flex-col justify-center items-center rounded-3xl'
     ]"
   >
     <div class="w-full h-[60%] bg-red-error rounded-3xl flex justify-center items-center">

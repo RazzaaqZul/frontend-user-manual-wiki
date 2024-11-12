@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="w-[35%]">
+  <form @submit.prevent="handleSubmit" class="w-[70%] sm:w-[80%] md:w-[70%] lg:w-[35%]">
     <!-- Welcome message -->
     <h2 class="text-2xl font-semibold text-soft-blue mb-6">Welcome Back!</h2>
 

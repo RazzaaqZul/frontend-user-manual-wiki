@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-5 px-[15%]">
+  <div class="mb-5 px-[2%] sm:px-[10%] md:px-[10%] lg:px-[15%]">
     <NavbarComponent />
     <div class="flex justify-between items-center border-b-4 border-grey-input mb-5">
       <h2 class="text-2xl font-bold text-soft-blue py-5">Edit User Manual</h2>

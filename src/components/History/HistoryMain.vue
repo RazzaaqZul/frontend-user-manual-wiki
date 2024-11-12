@@ -42,34 +42,41 @@
         >
           {{ currentDataUserManual?.title }} Revision History
         </div>
-        <table class="min-w-full table-auto">
+        <table class="min-w-full table-fixed overflow-x-auto">
+          <thead class="hidden lg:table-header-group">
+            <tr>
+              <th class="px-4 py-2 text-left">File</th>
+              <th class="px-4 py-2 text-left">Title</th>
+              <th class="px-4 py-2 text-left">Version</th>
+              <th class="px-4 py-2 text-left">Updated At</th>
+              <th class="px-4 py-2 text-left">Editor</th>
+              <th class="px-4 py-2 text-left">Size</th>
+              <th class="px-4 py-2 text-left">Status</th>
+              <th class="px-4 py-2 text-left">Action</th>
+            </tr>
+          </thead>
           <tbody>
-            <!-- Baris untuk currentDataUserManual -->
-            <tr v-if="currentDataUserManual">
-              <td :class="[itemStyle()]">
+            <tr v-if="currentDataUserManual" class="block lg:table-row">
+              <td :class="itemStyle()" data-label="File">
                 <img src="../../assets/icon/icon-file.png" class="w-8" alt="logo-file" />
               </td>
-              <td :class="[itemStyle()]">
-                {{ currentDataUserManual.title }}
-              </td>
-              <td :class="[itemStyle()]">
-                {{ currentDataUserManual.version }}
-              </td>
-              <td :class="[itemStyle()]">
+              <td :class="itemStyle()" data-label="Title">{{ currentDataUserManual.title }}</td>
+              <td :class="itemStyle()" data-label="Version">{{ currentDataUserManual.version }}</td>
+              <td :class="itemStyle()" data-label="Updated At">
                 {{ formatDateTime(currentDataUserManual.updated_at) }}
               </td>
-              <td :class="[itemStyle()]">
+              <td :class="itemStyle()" data-label="Editor">
                 {{
                   dataUserManualHistory.length !== 0
                     ? 'Edited By ' + currentDataUserManual.latest_editor
                     : 'Created By ' + currentDataUserManual.initial_editor
                 }}
               </td>
-              <td :class="[itemStyle()]">
-                {{ currentDataUserManual.size }}
+              <td :class="itemStyle()" data-label="Size">{{ currentDataUserManual.size }}</td>
+              <td :class="itemStyle()" data-label="Status" class="text-soft-blue italic">
+                Latest Version
               </td>
-              <td :class="[itemStyle(), 'text-soft-blue italic']">Latest Version</td>
-              <td :class="[itemStyle()]">
+              <td :class="itemStyle()" data-label="Action">
                 <img
                   src="../../assets/icon/icon-delete.png"
                   alt="delete"
@@ -79,40 +86,40 @@
               </td>
             </tr>
 
-            <!-- Baris untuk sortedHistory -->
-            <tr v-for="history in sortedHistory" :key="history.user_manual_history_id">
-              <td :class="[itemStyle()]">
+            <!-- Rows for sorted history -->
+            <tr
+              v-for="history in sortedHistory"
+              :key="history.user_manual_history_id"
+              class="block lg:table-row"
+            >
+              <td :class="itemStyle()" data-label="File">
                 <RouterLink
                   :to="`/main/user-manuals/${history.user_manual_id}/histories/${history.user_manual_history_id}/detail`"
                 >
                   <img src="../../assets/icon/icon-file.png" class="w-8" alt="logo-file" />
                 </RouterLink>
               </td>
-              <td :class="[itemStyle()]">{{ history.title }}</td>
-              <td :class="[itemStyle()]">{{ history.version }}</td>
-              <td :class="[itemStyle()]">
+              <td :class="itemStyle()" data-label="Title">{{ history.title }}</td>
+              <td :class="itemStyle()" data-label="Version">{{ history.version }}</td>
+              <td :class="itemStyle()" data-label="Updated At">
                 {{
                   history.user_manual_history_id === oldestHistory.user_manual_history_id
                     ? formatDateTime(currentDataUserManual?.created_at)
                     : formatDateTime(history.updated_at)
                 }}
               </td>
-              <td :class="[itemStyle()]">
+              <td :class="itemStyle()" data-label="Editor">
                 {{
                   history.user_manual_history_id === oldestHistory.user_manual_history_id
                     ? 'Created By ' + history.initial_editor
                     : 'Edited By ' + history.latest_editor
                 }}
               </td>
-              <td :class="[itemStyle()]">{{ history.size }}</td>
-              <td :class="[itemStyle()]"></td>
-              <td :class="[itemStyle()]">
-                <!-- <img
-                  src="../../assets/icon/icon-delete.png"
-                  alt="delete"
-                  class="w-6 cursor-pointer hover:scale-110"
-                  @click="openHistoryDeleteDialog(history)"
-                /> -->
+              <td :class="itemStyle()" data-label="Size">{{ history.size }}</td>
+              <td :class="itemStyle()" data-label="Status"></td>
+              <td :class="itemStyle()" data-label="Action">
+                <!-- Uncomment to enable delete action -->
+                <!-- <img src="../../assets/icon/icon-delete.png" alt="delete" class="w-6 cursor-pointer hover:scale-110" @click="openHistoryDeleteDialog(history)" /> -->
               </td>
             </tr>
           </tbody>
