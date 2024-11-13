@@ -18,7 +18,7 @@
       </div>
       <p
         v-if="errors?.email?.[0]"
-        class="text-red-custom text-md capitalize my-2 animate__animated animate__fadeInDown mx-[1rem]"
+        class="text-red-custom text-md my-2 animate__animated animate__fadeInDown mx-[1rem]"
       >
         {{ errors?.email?.[0] }}
       </p>
@@ -47,13 +47,13 @@
       </div>
       <p
         v-if="errors?.password?.[0]"
-        class="text-red-custom text-md capitalize my-2 animate__animated animate__fadeInDown mx-[1rem]"
+        class="text-red-custom text-md my-2 animate__animated animate__fadeInDown mx-[1rem]"
       >
         {{ errors?.password?.[0] }}
       </p>
       <p
         v-if="errors.message"
-        class="text-red-custom text-md capitalize my-6 animate__animated animate__fadeInDown mx-[1rem]"
+        class="text-red-custom text-md my-6 animate__animated animate__fadeInDown mx-[1rem]"
       >
         {{ errors.message }}
       </p>

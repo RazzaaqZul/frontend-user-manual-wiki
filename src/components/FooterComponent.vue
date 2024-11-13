@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-fit md:h-[700px] xl:h-[100vh] bg-dark-blue px-4 py-6 md:py-9">
+  <div class="w-full h-fit md:h-[700px] xl:h-[50vh] bg-dark-blue px-4 py-6 md:py-9">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-center gap-8 md:gap-20">
       <!-- Footer Left -->
       <section class="flex flex-col gap-3 items-center md:items-start">
@@ -19,7 +19,7 @@
       </section>
 
       <!-- Footer Right -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 md:gap-20">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-20">
         <section v-for="section in dataFooter" :key="section.title">
           <h3 class="text-yellow-custom font-semibold text-sm md:text-base text-left md:text-left">
             {{ section.title }}

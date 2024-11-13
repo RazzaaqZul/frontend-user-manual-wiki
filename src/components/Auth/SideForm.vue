@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <div class="absolute bg-gradient-color-card right-0 h-full rounded-2xl w-7"></div>
+      <div class="hidden sm:block absolute bg-gradient-color-card right-0 h-full rounded-2xl w-7" />
       <RouterLink :to="`${router}`">
         <button
           class="absolute p-3 shadow-xl bg-white-background rounded-full top-4 right-14 hover:scale-110 duration-300"
