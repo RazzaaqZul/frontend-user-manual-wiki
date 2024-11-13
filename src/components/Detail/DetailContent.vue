@@ -44,7 +44,7 @@ const formattedContent = computed(() => {
       // Jika ID hanya berupa angka, ubah menjadi null
       if (/^\d+$/.test(id)) id = null
 
-      return `<h1 id="${id || ''}" class=" text-[15px] lg:text-2xl text-soft-blue p-1 border-b-2 border-b-grey-background my-10">${p1.replace(/<(strong|em)[^>]*>(.*?)<\/\1>/g, '$2').trim()}</h1>`
+      return `<h1 id="${id || ''}" class=" text-[15px] md:text-[25px] lg:text-2xl text-soft-blue p-1 border-b-2 border-b-grey-background my-10">${p1.replace(/<(strong|em)[^>]*>(.*?)<\/\1>/g, '$2').trim()}</h1>`
     })
     .replace(/<h2[^>]*>(.*?)<\/h2>/g, (match, p1) => {
       let id = p1
@@ -66,15 +66,24 @@ const formattedContent = computed(() => {
         h2Counts[id] = 1
       }
 
-      return `<h2 id="${id || ''}" class="text-[12px] lg:text-xl text-soft-blue my-3">${p1.replace(/<(strong|em)[^>]*>(.*?)<\/\1>/g, '$2').trim()}</h2>`
+      return `<h2 id="${id || ''}" class="text-[12px] md:text-[20px] lg:text-xl text-soft-blue my-3">${p1.replace(/<(strong|em)[^>]*>(.*?)<\/\1>/g, '$2').trim()}</h2>`
     })
 
   content = content
-    .replace(/<p[^>]*>(.*?)<\/p>/g, '<p class="text-[10px] lg:text-md my-5">$1</p>')
-    .replace(/<ol[^>]*>(.*?)<\/ol>/g, '<ol class="list-decimal pl-5 mx-10">$1</ol>')
-    .replace(/<ul[^>]*>(.*?)<\/ul>/g, '<ul class="list-disc my-2 mx-10">$1</ul>')
-    .replace(/<a([^>]*)>(.*?)<\/a>/g, '<a$1 class="text-soft-blue">$2</a>')
-    .replace(/<li[^>]*>(.*?)<\/li>/g, '<li class="text-md">$1</li>')
+    .replace(/<p[^>]*>(.*?)<\/p>/g, '<p class="text-[10px] md:text-[15px] lg:text-md my-5">$1</p>')
+    .replace(
+      /<ol[^>]*>(.*?)<\/ol>/g,
+      '<ol class="text-[10px] md:text-[15px] list-decimal pl-5 mx-10">$1</ol>'
+    )
+    .replace(
+      /<ul[^>]*>(.*?)<\/ul>/g,
+      '<ul class="text-[10px] md:text-[15px] list-disc my-2 mx-10">$1</ul>'
+    )
+    .replace(
+      /<a([^>]*)>(.*?)<\/a>/g,
+      '<a$1 class="text-[10px] md:text-[15px] text-soft-blue">$2</a>'
+    )
+    .replace(/<li[^>]*>(.*?)<\/li>/g, '<li class="text-[10px] md:text-[15px] text-md">$1</li>')
     .replace(
       /<img[^>]*src="([^"]*)"[^>]*\/?>/g,
       '<img src="$1" class="my-5 mx-auto  rounded-[2%] h-auto" alt="Image" />'

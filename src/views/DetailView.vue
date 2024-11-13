@@ -6,10 +6,13 @@
       </div>
     </div>
     <div class="relative">
-      <img src="../assets/images/detail-background.png" class="w-full h-[6rem] lg:h-[10rem]" />
+      <img
+        src="../assets/images/detail-background.png"
+        class="w-full h-[6rem] sm:h-[7rem] lg:h-[10rem]"
+      />
       <div class="absolute inset-0 flex items-center justify-center">
         <h1
-          class="w-[60%] lg:w-[40%] text-center font-bold text-[12px] lg:text-[25px] text-white-background"
+          class="w-[60%] lg:w-[40%] text-center font-bold text-[12px] sm:text-[20px] lg:text-[25px] text-white-background"
         >
           {{ dataUserManual.title }}
         </h1>
@@ -64,7 +67,7 @@
           Last Updated :
           <span class="font-light">{{ formatDate(dataUserManual.updated_at) }}</span>
         </div>
-        <div class="flex justify-end items-center gap-2">
+        <div class="flex justify-end items-center gap-2 my-4">
           <RouterLink
             :to="`/main/user-manuals/${dataUserManual.user_manual_id}/edit`"
             v-if="isDisplay"

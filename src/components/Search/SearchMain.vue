@@ -6,7 +6,7 @@
   >
     {{ console.log(searchResults) }}
     <div v-if="searchResults">
-      <div class="flex justify-start items-center gap-2 text-soft-blue">
+      <div class="flex justify-start text-sm items-center gap-2 text-soft-blue">
         <!-- Title with optional highlight -->
         <span v-html="highlightMatch(searchResults.title)" class="font-semibold"></span>
 
