@@ -1,51 +1,59 @@
 <template>
   <form @submit.prevent="handleSubmit" class="w-[70%] sm:w-[80%] md:w-[70%] lg:w-[35%]">
     <!-- Welcome message -->
-    <h2 class="text-2xl font-semibold text-soft-blue mb-6">Welcome Back!</h2>
+    <h2 class="text-2xl font-semibold text-soft-blue mb-6">Selamat Datang!</h2>
 
-    <!-- Username field -->
-    <div class="mb-4">
-      <label>Username <span class="text-red-custom font-extrabold">*</span></label>
+    <!-- email field -->
+    <div class="mb-4 min-h-[6rem]">
+      <label>Alamat Email <span class="text-red-custom font-extrabold">*</span></label>
       <div class="border-gradient">
         <input
-          id="username"
-          v-model="input.username"
-          type="text"
-          placeholder="Enter your username"
-          @focus="clearError"
-          :class="[inputStyle()]"
-        />
-      </div>
-    </div>
-    <p
-      v-if="errors?.username?.[0]"
-      class="text-red-custom text-md capitalize my-2 animate__animated animate__fadeInDown"
-    >
-      {{ errors?.username?.[0] }}
-    </p>
-
-    <!-- Password field -->
-    <div class="mb-4">
-      <label>Password <span class="text-red-custom font-extrabold">*</span></label>
-      <div class="border-gradient">
-        <input
-          id="password"
-          v-model="input.password"
-          type="password"
-          placeholder="Enter your password"
+          id="email"
+          v-model="input.email"
+          type="email"
+          placeholder="Masukkan alamat Email"
           @focus="clearError"
           :class="[inputStyle()]"
         />
       </div>
       <p
+        v-if="errors?.email?.[0]"
+        class="text-red-custom text-md capitalize my-2 animate__animated animate__fadeInDown mx-[1rem]"
+      >
+        {{ errors?.email?.[0] }}
+      </p>
+    </div>
+
+    <!-- Password field with show/hide icon -->
+    <div class="mb-4 min-h-[6rem]">
+      <label>Password <span class="text-red-custom font-extrabold">*</span></label>
+      <div class="border-gradient relative">
+        <input
+          id="password"
+          v-model="input.password"
+          :type="showPassword ? 'text' : 'password'"
+          placeholder="Masukkan password"
+          @focus="clearError"
+          :class="[inputStyle(), 'pr-12']"
+        />
+        <div class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center">
+          <img
+            :src="showPassword ? eyesOpenIcon : eyesCloseIcon"
+            alt="Toggle Password Visibility"
+            class="cursor-pointer w-6 h-6"
+            @click="togglePassword"
+          />
+        </div>
+      </div>
+      <p
         v-if="errors?.password?.[0]"
-        class="text-red-custom text-md capitalize my-2 animate__animated animate__fadeInDown"
+        class="text-red-custom text-md capitalize my-2 animate__animated animate__fadeInDown mx-[1rem]"
       >
         {{ errors?.password?.[0] }}
       </p>
       <p
         v-if="errors.message"
-        class="text-red-custom text-md capitalize my-6 animate__animated animate__fadeInDown"
+        class="text-red-custom text-md capitalize my-6 animate__animated animate__fadeInDown mx-[1rem]"
       >
         {{ errors.message }}
       </p>
@@ -67,15 +75,15 @@
             aria-label="Custom ProgressSpinner"
           />
         </template>
-        <template v-else> LOG IN </template>
+        <template v-else> Masuk </template>
       </button>
     </div>
 
     <!-- Sign Up link -->
     <div class="text-center">
       <p class="text-sm text-gray-600">
-        Don’t have an account?
-        <RouterLink to="/register"> <span class="text-soft-blue">Sign Up</span> </RouterLink>
+        Belum punya akun?
+        <RouterLink to="/register"> <span class="text-soft-blue">Daftarkan</span> </RouterLink>
       </p>
     </div>
   </form>
@@ -87,24 +95,34 @@ import { useRouter } from 'vue-router'
 import { userLogin } from '../../services/modules/AuthService'
 import ProgressSpinner from 'primevue/progressspinner'
 
+// Icons for eyes open and eyes close
+import eyesOpenIcon from './../../assets/icon/icon-eyes-open.png'
+import eyesCloseIcon from './../../assets/icon/icon-eyes-close.png'
+
 const emit = defineEmits(['success', 'error'])
 
 const input = ref({
-  username: '',
+  email: '',
   password: ''
 })
 
 const errors = ref({
-  username: null,
+  email: null,
   password: null,
   message: null
 })
 
 const router = useRouter()
 const loading = ref(false) // Loading state
+const showPassword = ref(false) // Password visibility state
+
+// Toggle password visibility
+const togglePassword = () => {
+  showPassword.value = !showPassword.value
+}
 
 const handleSubmit = async () => {
-  errors.value = { username: '', password: '', general: '' }
+  errors.value = { email: '', password: '', general: '' }
   loading.value = true // Start loading
 
   try {
@@ -114,7 +132,7 @@ const handleSubmit = async () => {
       errors.value = response.data.errors || ['Unknown error occurred']
       emit('error', errors.value)
     } else if (response.status === 401) {
-      errors.value.message = 'Username or Password Wrong'
+      errors.value.message = 'Email atau Password salah'
       emit('error', errors.value)
     } else {
       errors.value = []
@@ -136,7 +154,19 @@ const inputStyle = () => {
 
 const clearError = () => {
   errors.value.message = ''
-  errors.value.username = ''
+  errors.value.email = ''
   errors.value.password = ''
 }
 </script>
+<style scoped>
+/* Tambahkan style untuk memastikan container input konsisten */
+.border-gradient {
+  position: relative;
+  width: 100%;
+}
+
+/* Pastikan input memiliki ruang cukup untuk icon */
+.border-gradient-inner {
+  padding: 0.75rem 3rem 0.75rem 1rem;
+}
+</style>

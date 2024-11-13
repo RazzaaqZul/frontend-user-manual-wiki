@@ -1,10 +1,10 @@
 <template>
   <section class="flex justify-center items-center h-screen">
     <div
-      class="flex flex-col justify-center items-center shadow-2xl drop-shadow-2xl rounded-2xl h-[85%] w-[80%] gap-3"
+      class="flex flex-col justify-center items-center shadow-2xl drop-shadow-2xl rounded-2xl h-[95%] w-[80%] gap-3"
     >
       <!-- BPJS Logo -->
-      <div class="basis-[20%] flex justify-center items-center">
+      <div class="basis-[15%] flex justify-center items-center">
         <img
           src="../../assets/icon/logo-bpjamsostek-color.png"
           class="object-fill w-[25vw] lg:w-[15vw]"
@@ -12,7 +12,7 @@
       </div>
 
       <!-- Form and Image Container -->
-      <div class="flex justify-center items-center w-full gap-9 h-[100%] rounded-2xl basis-[80%]">
+      <div class="flex justify-center items-center w-full gap-9 h-[100%] rounded-2xl basis-[85%]">
         <!-- Slot for Login or Register Form -->
         <slot></slot>
 

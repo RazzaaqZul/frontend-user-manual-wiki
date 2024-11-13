@@ -3,10 +3,9 @@ import axios from '../axios/axios'
 export const userLogin = async (request) => {
   try {
     const data = {
-      username: request.username,
+      email: request.email,
       password: request.password
     }
-
     const response = await axios.post(`/api/login`, data, {
       headers: {
         Accept: 'application/json'

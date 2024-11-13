@@ -12,30 +12,34 @@ export const formattedMessage = (errorMessage) => {
       .map((field) => {
         switch (field) {
           case 'img':
-            return 'image'
+            return 'Image'
           case 'short_desc':
-            return 'deskripsi singkat'
+            return 'Deskripsi Singkat'
           case 'category':
-            return 'kategori'
+            return 'Kategori'
           case 'content':
-            return 'konten'
+            return 'Konten'
           case 'title':
-            return 'judul'
+            return 'Judul'
           case 'version':
-            return 'versi'
+            return 'Versi'
           case 'username':
-            return 'username'
+            return 'Username'
           case 'password':
-            return 'password'
+            return 'Password'
           case 'email':
-            return 'email'
+            return 'Email'
+          case 'confirmPassword':
+            return 'Konfirmasi Password'
+          case 'name':
+            return 'Nama Lengkap'
           default:
             return field
         }
       })
       .join(', ')
 
-    return `Terjadi kesalahan pada field: ${fieldNames}`
+    return `Terjadi kesalahan pada kolom: ${fieldNames}`
   }
 
   return 'Tidak ada kesalahan yang terdeteksi.'
