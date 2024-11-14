@@ -15,7 +15,7 @@
   <Popover ref="popoverRef" class="ml-[30px]">
     <div class="flex flex-col gap-4">
       <div>
-        <span class="font-semibold block mb-2 text-dark-blue">Account Options</span>
+        <span class="font-semibold block mb-2 text-dark-blue">Opsi Akun</span>
         <ul class="list-none p-0 m-0 flex flex-col">
           <li
             v-for="option in filteredOptions"
@@ -68,7 +68,7 @@ const userRole = computed(() => {
 // Computed property for filtered options based on auth state
 const filteredOptions = computed(() => {
   const isAuthenticated = !!getUserData()
-  return isAuthenticated ? [{ name: 'Logout' }] : [{ name: 'Login' }]
+  return isAuthenticated ? [{ name: 'Keluar' }] : [{ name: 'Masuk' }]
 })
 
 // Handle option selection
@@ -76,9 +76,9 @@ const selectOption = async (option) => {
   selectedOption.value = option
   popoverRef.value?.hide()
 
-  if (option.name === 'Login') {
+  if (option.name === 'Masuk') {
     router.push('/login')
-  } else if (option.name === 'Logout') {
+  } else if (option.name === 'Keluar') {
     try {
       const response = await userLogout()
       console.log(response.status)
