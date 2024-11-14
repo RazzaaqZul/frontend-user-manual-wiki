@@ -17,7 +17,7 @@
         <slot></slot>
 
         <!-- Side Image Section -->
-        <div class="w-[40%] h-full justify-between items-center hidden lg:flex">
+        <div class="w-[40%] h-full justify-between items-center hidden lg:flex select-none">
           <div class="bg-grey-button opacity-40 h-[90%] rounded-2xl w-1"></div>
 
           <!-- Center the images within this relative container -->

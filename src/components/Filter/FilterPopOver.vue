@@ -1,7 +1,7 @@
 <template>
   <div class="card flex justify-center">
     <FilterButton
-      :label="selectedCategory ? selectedCategory.name : 'All'"
+      :label="selectedCategory ? selectedCategory.name : 'Semua'"
       @click="toggle"
       class="w-28"
     />
@@ -39,7 +39,7 @@ const selectedCategory = ref(null)
 const categories = ref([
   { name: 'Ekternal', value: 'eksternal' },
   { name: 'Internal', value: 'internal' },
-  { name: 'All', value: '' }
+  { name: 'Semua', value: '' }
 ])
 
 const selectCategory = (category) => {

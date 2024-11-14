@@ -10,8 +10,9 @@
         <FileUpload
           ref="fileupload"
           mode="basic"
-          :maxFileSize="1000000"
+          :maxFileSize="2000000"
           @select="onFileSelect"
+          invalidFileSizeMessage="Ukuran file tidak valid, File harus lebih kecil dari 2 MB"
           :auto="true"
           chooseLabel="Pilih Gambar"
           accept="image/*"

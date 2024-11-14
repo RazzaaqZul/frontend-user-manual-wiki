@@ -79,3 +79,162 @@ table tbody tr td::before {
     content: none;
   }
 }
+
+.popup-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* pastikan z-index lebih tinggi dari elemen lain */
+  animation: scale-in-center 0.4s ease-out;
+}
+
+@keyframes scale-in-center {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Container for the entire form */
+.form-container {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  margin: auto;
+  border: 1px solid #7a7a7a; /* Complete border declaration */
+}
+
+/* Layout of the form items */
+.form-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Adds space between form groups */
+}
+
+/* Individual form group */
+.form-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  /* Assuming 640px is the breakpoint for sm */
+  .form-group {
+    flex-direction: column;
+  }
+}
+
+/* Labels for form fields */
+.form-group label {
+  font-size: 16px;
+  font-weight: 500;
+  width: 100px; /* Fixed width for label alignment */
+}
+
+/* Input fields */
+.input-field {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.border-field {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Cover image preview */
+.cover-preview {
+  width: 80px; /* Adjusts the size of the preview */
+  height: 80px;
+  border-radius: 6px;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cover-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover; /* Ensures the image fits well */
+}
+
+/* Upload button */
+.upload-button {
+  background-color: #ccc;
+  padding: 10px 20px;
+  margin-left: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Styling for the rich text editor */
+.text-editor {
+  width: 100%;
+  height: 300px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  resize: vertical;
+}
+
+/* Disclaimer text at the bottom of the form */
+.disclaimer {
+  font-size: 12px;
+  color: #555;
+  line-height: 1.5;
+  margin-top: 20px;
+}
+
+/* Form action buttons (cancel and save) */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Cancel button */
+.cancel-button {
+  background-color: #ccc;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+}
+
+/* Save button */
+.save-button {
+  width: 10%;
+  background-color: #0056d2;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+
+  font-size: 14px;
+  border: none;
+  font-weight: bold;
+}
+
+.error-alert {
+  color: red;
+  padding-left: 109px;
+  font-size: small;
+  font-style: italic;
+}

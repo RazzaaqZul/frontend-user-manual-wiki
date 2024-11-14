@@ -28,8 +28,8 @@
     class="flex flex-col gap-10 justify-center items-center h-[50vh] animate__animated animate__tada"
   >
     <img src="../../assets/images/image-search-not-found.png" class="w-[20%]" />
-    <h1 class="font-semibold text-soft-blue">
-      Try creating the page of User Manual on this wiki to help others!
+    <h1 class="font-semibold text-soft-blue text-center w-[100%] sm:w-[70%] xl:w-[50%]">
+      Cobalah membuat halaman Panduan Pengguna di wiki ini untuk membantu orang lain!
     </h1>
   </div>
 </template>
@@ -64,7 +64,7 @@ const fetchUserManuals = async () => {
   fetchingUserManuals.value = true
   try {
     const response = await indexUserManual()
-    if (response.status === 404) {
+    if (response.status === 404 || response.status === 500) {
       return (isEmpty.value = true)
     }
     dataUserManual.value = response || []

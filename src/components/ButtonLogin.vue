@@ -6,7 +6,7 @@
     <div class="bg-gradient-color w-fit rounded-full p-2">
       <img src="../assets/icon/icon-user.png" :alt="'logo_user'" class="w-5" />
     </div>
-    <h1 class="font-normal text-grey-word capitalize hidden xl:block">
+    <h1 class="font-normal text-grey-word hidden xl:block">
       {{ userRole || 'Log In' }}
     </h1>
     <img src="../assets/icon/icon-arrow-right.png" :alt="'logo_user'" class="w-4 hidden xl:block" />
@@ -57,7 +57,12 @@ const getUserData = () => {
 // Computed property for user role
 const userRole = computed(() => {
   const userData = getUserData()
-  return userData?.role || null
+  if (userData?.role === 'technical_writer') {
+    return 'Technical Writer'
+  } else if (userData?.role === 'admin') {
+    return 'Admin'
+  }
+  return null
 })
 
 // Computed property for filtered options based on auth state

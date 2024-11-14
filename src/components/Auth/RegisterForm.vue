@@ -1,5 +1,7 @@
 <template>
-  <div class="w-[70%] sm:w-[80%] md:w-[70%] lg:w-[35%] relative h-full">
+  <div
+    class="w-[70%] sm:w-[80%] md:w-[70%] lg:w-[35%] relative h-full animate__animated animate__fadeIn"
+  >
     <div
       class="text-soft-blue text-2xl mb-2 font-semibold w-fit flex flex-col justify-center gap-4"
     >

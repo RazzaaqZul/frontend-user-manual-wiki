@@ -22,7 +22,7 @@
           type="text"
           id="title"
           v-model="form.title"
-          placeholder="Enter title"
+          placeholder="Masukkan judul"
           class="input-field"
         />
       </div>
@@ -37,7 +37,7 @@
           type="text"
           id="short_desc"
           v-model="form.short_desc"
-          placeholder="Enter Deskripsi Singkat"
+          placeholder="Masukkan deskripsi singkat"
           class="input-field"
         />
       </div>
@@ -47,7 +47,7 @@
 
       <!-- Creator -->
       <div class="form-group">
-        <label for="creator">Creator:</label>
+        <label for="creator">Pembuat:</label>
         <input
           type="text"
           id="initial_editor"
@@ -60,7 +60,7 @@
 
       <!-- Editor -->
       <div v-if="isUpdate" class="form-group">
-        <label for="creator">Editor:</label>
+        <label for="creator">Pengedit:</label>
         <input
           type="text"
           id="latest_editor"
@@ -72,30 +72,79 @@
       </div>
 
       <!-- Version -->
-      <div class="form-group">
-        <label for="version">Version:</label>
+      <div class="form-group relative mb-6">
+        <label for="version">Versi:</label>
         <input
           type="text"
           id="version"
           v-model="form.version"
-          placeholder="Enter version"
+          placeholder="Masukkan versi. Contoh: 1.0.0"
           class="input-field"
         />
+        <div
+          class="absolute top-[100px] sm:left-28 sm:top-14 flex justify-center items-center gap-2"
+        >
+          <img
+            src="../assets/icon/icon-curious.png"
+            class="w-6 hover:scale-105 cursor-pointer"
+            label="Show"
+            @click="visible = true"
+          />
+          <p class="text-sm text-soft-blue font-semibold">Bagaimana membuat versi?</p>
+        </div>
       </div>
+      <Dialog
+        v-model:visible="visible"
+        modal
+        header="Edit Profile"
+        :style="{ width: '45rem' }"
+        class="m-4"
+      >
+        <template #header>
+          <div class="inline-flex items-center justify-center gap-2">
+            <span class="font-bold whitespace-nowrap">Penjelasan Versi</span>
+          </div>
+        </template>
+
+        <p class="mb-4 text-justify">
+          <strong>Versi 0.0.0</strong> menandakan tahap awal atau prototipe dari aplikasi. Format
+          versi terdiri dari tiga angka:
+        </p>
+        <ul class="text-justify list-decimal px-10">
+          <li>
+            <strong>Mayor</strong>: Angka pertama menunjukkan perubahan besar dalam struktur atau
+            isi panduan, seperti penambahan bab baru (Header 1), perubahan format utama, atau revisi
+            besar-besaran pada konten.
+          </li>
+          <li>
+            <strong>Minor</strong>: Angka kedua menunjukkan adanya penambahan atau modifikasi konten
+            tanpa mengubah struktur panduan secara besar-besaran, misalnya, penambahan sub-bab
+            (Header 2), penjelasan lebih detail, atau pengayaan informasi.
+          </li>
+          <li>
+            <strong>Patch</strong>: Angka ketiga menunjukkan perbaikan kecil, seperti koreksi
+            kesalahan pengetikan, perbaikan tata bahasa, atau penyesuaian kecil lainnya yang tidak
+            memengaruhi struktur atau konten utama panduan.
+          </li>
+        </ul>
+
+        <template #footer> </template>
+      </Dialog>
+
       <label v-if="errorMessage?.version?.[0]" class="error-alert">
         {{ errorMessage.version[0] }}
       </label>
 
       <!-- Category -->
       <div class="form-group">
-        <label for="category">Category:</label>
+        <label for="category">Kategori:</label>
         <Select
           v-model="selectedCategory"
           :options="categories"
           optionLabel="name"
           @change="handleCategoryChange"
           class="w-full border-grey-background rounded focus:outline-none focus:ring-2 focus:ring-soft-blue"
-          placeholder="Select a category"
+          placeholder="Pilih category"
           overlayClass="border-grey-background rounded p-2 focus:outline-none focus:ring-2 focus:ring-soft-blue"
         />
       </div>
@@ -105,7 +154,7 @@
 
       <!-- Text Editor -->
       <div class="form-group">
-        <label for="content">Isi:</label>
+        <label for="content">Konten:</label>
         <FormTextEditor :form="form" @update:form="updateForm" />
       </div>
       <label v-if="errorMessage?.content?.[0]" class="error-alert">
@@ -113,12 +162,12 @@
       </label>
 
       <!-- Disclaimer -->
-      <p class="disclaimer">
-        *Please note that all contributions to usermanualwiki may be edited, altered, or removed by
-        other contributors. If you do not want your writing to be edited mercilessly, then do not
-        submit it here. You are also promising us that you wrote this yourself, or copied it from a
-        public domain or similar free resource (Read Usermanualwiki: Copyrights for details). Do not
-        submit copyrighted work without permission!
+      <p class="disclaimer text-justify">
+        *Harap dicatat bahwa semua kontribusi pada User Manual Wiki dapat diedit, diubah, atau
+        dihapus oleh kontributor lain. Jika Anda tidak ingin tulisan Anda diedit tanpa ampun, jangan
+        kirimkan di sini. Anda juga berjanji kepada kami bahwa Anda menulisnya sendiri, atau
+        menyalinnya dari domain publik atau sumber gratis serupa. Jangan kirimkan karya berhak cipta
+        tanpa izin!
       </p>
 
       <!-- Action Buttons -->
@@ -126,7 +175,7 @@
         <RouterLink
           :to="form.user_manual_id ? `/main/user-manuals/${form.user_manual_id}` : '/main'"
         >
-          <button type="button" class="cancel-button">Cancel</button>
+          <button type="button" class="cancel-button">Batal</button>
         </RouterLink>
 
         <!-- Conditionally render the ProgressSpinner or the Save button -->
@@ -148,7 +197,7 @@
               aria-label="Custom ProgressSpinner"
             />
           </template>
-          <template v-else> Save </template>
+          <template v-else>Simpan</template>
         </button>
       </div>
 
@@ -191,6 +240,7 @@ import PopUpSuccessful from '@/components/widgets/PopUpSuccessful.vue'
 import PopUpUnsuccessfull from '@/components/widgets/PopUpUnsuccessfull.vue'
 import { formattedMessage } from '@/helpers/FormattedMessageError'
 import ProgressSpinner from 'primevue/progressspinner'
+import Dialog from 'primevue/dialog'
 
 // Define props
 const props = defineProps({
@@ -200,6 +250,8 @@ const props = defineProps({
   },
   isUpdate: Boolean
 })
+
+const visible = ref(false)
 
 // Reactive form object
 const form = ref(props.form)
@@ -389,164 +441,3 @@ const contentSize = () => {
   }
 }
 </script>
-
-<style scoped>
-.popup-center {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000; /* pastikan z-index lebih tinggi dari elemen lain */
-  animation: scale-in-center 0.4s ease-out;
-}
-
-@keyframes scale-in-center {
-  0% {
-    transform: translate(-50%, -50%) scale(0.5);
-    opacity: 0;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-  }
-}
-
-/* Container for the entire form */
-.form-container {
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 30px;
-  margin: auto;
-  border: 1px solid #7a7a7a; /* Complete border declaration */
-}
-
-/* Layout of the form items */
-.form-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 20px; /* Adds space between form groups */
-}
-
-/* Individual form group */
-.form-group {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-@media (max-width: 640px) {
-  /* Assuming 640px is the breakpoint for sm */
-  .form-group {
-    flex-direction: column;
-  }
-}
-
-/* Labels for form fields */
-.form-group label {
-  font-size: 16px;
-  font-weight: 500;
-  width: 100px; /* Fixed width for label alignment */
-}
-
-/* Input fields */
-.input-field {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 16px;
-}
-
-.border-field {
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-/* Cover image preview */
-.cover-preview {
-  width: 80px; /* Adjusts the size of the preview */
-  height: 80px;
-  border-radius: 6px;
-  background-color: #f0f0f0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.cover-preview img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: cover; /* Ensures the image fits well */
-}
-
-/* Upload button */
-.upload-button {
-  background-color: #ccc;
-  padding: 10px 20px;
-  margin-left: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  border: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/* Styling for the rich text editor */
-.text-editor {
-  width: 100%;
-  height: 300px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  resize: vertical;
-}
-
-/* Disclaimer text at the bottom of the form */
-.disclaimer {
-  font-size: 12px;
-  color: #555;
-  line-height: 1.5;
-  margin-top: 20px;
-}
-
-/* Form action buttons (cancel and save) */
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-/* Cancel button */
-.cancel-button {
-  background-color: #ccc;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  border: none;
-}
-
-/* Save button */
-.save-button {
-  width: 10%;
-  background-color: #0056d2;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 6px;
-
-  font-size: 14px;
-  border: none;
-  font-weight: bold;
-}
-
-.error-alert {
-  color: red;
-  padding-left: 109px;
-  font-size: small;
-  font-style: italic;
-}
-</style>

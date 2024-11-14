@@ -26,7 +26,7 @@
           <h1
             class="text-[100%] font-bold text-white-background hover:text-yellow-custom duration-300"
           >
-            Home
+            Beranda
           </h1>
         </RouterLink>
 
