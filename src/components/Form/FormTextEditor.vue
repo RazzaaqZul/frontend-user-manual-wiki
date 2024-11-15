@@ -37,6 +37,15 @@ const handleTextChange = () => {
 
   const sanitizedContent = sanitizeContent(quillHTML)
 
+  // Check if sanitized content is empty or only has empty <p></p>
+  const isEmpty = /^(\s*<(p|h[1-6])><br><\/\2>\s*)+$/.test(sanitizedContent.trim())
+
+  if (isEmpty) {
+    console.log(isEmpty)
+    emit('update:form', { ...props.form, content: undefined })
+    return
+  }
+
   // Only update if the sanitized content is different from the form content
   if (sanitizedContent !== props.form.content) {
     emit('update:form', { ...props.form, content: sanitizedContent })
