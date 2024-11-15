@@ -1,42 +1,43 @@
 <template>
   <section
-    class="fixed w-screen h-screen flex justify-center items-center bg-grey-word bg-opacity-20"
+    class="fixed w-screen h-screen animate__animated animate__fadeIn flex justify-center items-center bg-grey-word bg-opacity-40"
   >
-    <div class="delete-dialog" v-if="!showSuccessPopup && !showErrorPopup">
-      <p class="warning-text">
-        You are about to delete a page along with all of its history. Please confirm that you intend
-        to do this, that you understand the consequences, and that you are doing this in accordance
-        with
-        <span class="policy-link" @click="openPolicy">the policy</span>.
+    <div
+      class="delete-dialog popup-center animate__animated animate__zoomIn"
+      v-if="!showSuccessPopup && !showErrorPopup"
+    >
+      <p class="warning-text text-justify">
+        Anda akan menghapus halaman beserta seluruh riwayatnya. Harap konfirmasikan bahwa Anda
+        bermaksud melakukannya, bahwa Anda memahami konsekuensinya, dan bahwa Anda melakukannya
+
+        <span class="policy-link" @click="openPolicy">sesuai dengan kebijakan.</span>.
       </p>
 
       <div class="form-section">
-        <h2>Delete</h2>
-
         <div class="form-group">
-          <label>Reason:</label>
+          <label>Alasan:</label>
           <select v-model="selectedReason" class="reason-select">
-            <option value="">Select a reason</option>
+            <option value="">Pilih Alasan</option>
             <option value="spam">Spam</option>
-            <option value="inappropriate">Inappropriate content</option>
-            <option value="duplicate">Duplicate content</option>
-            <option value="other">Other reason</option>
+            <option value="inappropriate">Konten yang tidak sesuai</option>
+            <option value="duplicate">Konten yang duplikat</option>
+            <option value="other">Alasan lainnya</option>
           </select>
         </div>
 
-        <div v-if="selectedReason === 'other'" class="form-group">
-          <label>Other additional reason:</label>
+        <div v-if="selectedReason === 'other'" class="">
+          <label class="w-full">Alasan tambahan lainnya:</label>
           <textarea
             v-model="additionalReason"
-            class="additional-reason"
+            class="additional-reason mt-4"
             rows="4"
-            placeholder="Please specify your reason..."
+            placeholder="Harap tentukan alasan Anda..."
           ></textarea>
         </div>
 
         <div class="button-group">
-          <button @click="handleCancel" class="btn-cancel">Cancel</button>
-          <button @click="handleDelete" class="btn-delete" :disabled="!isValidForm">Delete</button>
+          <button @click="handleCancel" class="btn-cancel">Batal</button>
+          <button @click="handleDelete" class="btn-delete" :disabled="!isValidForm">Hapus</button>
         </div>
       </div>
     </div>
@@ -120,7 +121,7 @@ const openPolicy = () => {
 <style scoped>
 .delete-dialog {
   max-width: 600px;
-  padding: 20px;
+  padding: 22px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

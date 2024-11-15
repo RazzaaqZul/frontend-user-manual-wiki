@@ -1,6 +1,8 @@
 <template>
   <div class="px-[10%] py-4">
-    <h2 class="text-2xl font-bold text-soft-blue border-b-4 border-grey-input py-5 mb-5">Users</h2>
+    <h2 class="text-2xl font-bold text-soft-blue border-b-4 border-grey-input py-5 mb-5">
+      Pengguna
+    </h2>
 
     <section
       v-if="users && users.length > 0"
@@ -9,28 +11,23 @@
       <div class="card">
         <DataTable :value="users" tableStyle="min-width: 50rem" responsiveLayout="scroll">
           <Column field="name" header="Name" style="width: 150px" class="sm:w-40 md:w-60"></Column>
-          <Column
-            field="username"
-            header="Username"
-            style="width: 150px"
-            class="break-words sm:w-40 md:w-60"
-          ></Column>
+
           <Column
             field="email"
-            header="Email"
+            header="Nama"
             style="width: 200px"
             class="break-all sm:w-40 md:w-60"
           ></Column>
-          <Column field="role" header="Role" style="width: 100px" class="sm:w-32 md:w-48"></Column>
+          <Column field="role" header="Peran" style="width: 100px" class="sm:w-32 md:w-48"></Column>
           <Column
             field="created_at"
-            header="Created At"
+            header="Dibuat pada"
             style="width: 200px"
             class="sm:w-40"
           ></Column>
           <Column
             field="updated_at"
-            header="Last Login"
+            header="Terakhir Login"
             style="width: 250px"
             class="sm:w-40"
           ></Column>

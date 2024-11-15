@@ -4,22 +4,22 @@
   >
     <div class="restore-dialog animate__animated animate__fadeInDown">
       <p class="warning-text">
-        You are about to restore <strong>{{ item.title }}</strong> back to its original state.
-        Please confirm if you want to proceed.
+        Anda akan mengembalikan Panduan Pengguna <strong>{{ item.title }}</strong> ke keadaan semula
+        (tampil dalam Halaman Utama). Harap konfirmasi jika Anda ingin melanjutkan.
       </p>
 
       <div class="form-section">
         <div class="py-3">
           <input type="checkbox" v-model="isConfirmed" id="confirmRestore" />
-          <label for="confirmRestore">
-            I confirm that I want to restore this item and understand the consequences.
+          <label for="confirmRestore ">
+            Konfirmasi bahwa saya ingin mengembalikan item ini dan memahami konsekuensinya.
           </label>
         </div>
 
         <div class="button-group">
-          <button @click="handleCancel" class="btn-cancel">Cancel</button>
+          <button @click="handleCancel" class="btn-cancel">Batal</button>
           <button @click="handleRestore" class="btn-restore" :disabled="!isConfirmed">
-            Restore
+            Pulihkan
           </button>
         </div>
       </div>

@@ -3,13 +3,13 @@
     <Dialog
       v-model:visible="isVisible"
       close-icon="false"
-      header="Edit User"
+      header="Ubah Pengguna"
       pt:root:class="!border-0 !bg-transparent"
       pt:mask:class="backdrop-blur-sm"
       :style="{ width: '25rem' }"
     >
       <span class="text-surface-500 dark:text-surface-400 block mb-8">
-        Update your information.
+        Perbarui informasi pengguna.
       </span>
 
       <!-- Progress Spinner -->
@@ -18,17 +18,8 @@
       </div>
 
       <div v-else>
-        <div class="flex items-center gap-4 mb-4">
-          <label for="username" class="font-semibold w-24">Username</label>
-          <InputText
-            id="username"
-            class="flex-auto"
-            v-model="localUser.username"
-            autocomplete="off"
-          />
-        </div>
         <div class="flex items-center gap-4 mb-8">
-          <label for="email" class="font-semibold w-24">Email</label>
+          <label for="email" class="font-semibold w-24">Alamat Email</label>
           <InputText
             id="email"
             class="flex-auto"
@@ -38,11 +29,11 @@
           />
         </div>
         <div class="flex items-center gap-4 mb-8">
-          <label for="name" class="font-semibold w-24">Name</label>
+          <label for="name" class="font-semibold w-24">Nama Lengkap</label>
           <InputText id="name" class="flex-auto" v-model="localUser.name" autocomplete="off" />
         </div>
         <div class="flex items-center gap-4 mb-8">
-          <label for="role" class="font-semibold w-24">Role</label>
+          <label for="role" class="font-semibold w-24">Peran</label>
           <Select
             v-model="selectedRole"
             :options="roles"
@@ -53,10 +44,10 @@
           />
         </div>
         <div class="flex justify-end gap-2">
-          <Button type="button" label="Cancel" severity="secondary" @click="closeDialog"></Button>
+          <Button type="button" label="Batal" severity="secondary" @click="closeDialog"></Button>
           <Button
             type="button"
-            label="Save"
+            label="Simpan"
             severity="info"
             @click="saveUser"
             :disabled="isSaveDisabled"

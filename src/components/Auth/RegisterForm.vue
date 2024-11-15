@@ -5,7 +5,7 @@
     <div
       class="text-soft-blue text-2xl mb-2 font-semibold w-fit flex flex-col justify-center gap-4"
     >
-      <h1>Daftarkan Akun</h1>
+      <h1>Daftar Akun</h1>
     </div>
 
     <form @submit.prevent="handleSubmit" class="flex flex-col gap-2">

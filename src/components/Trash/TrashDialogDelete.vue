@@ -4,10 +4,10 @@
   >
     <div class="delete-dialog animate__animated animate__fadeInDown">
       <p class="warning-text">
-        You are about to delete <strong>{{ item.title }}</strong> along with all of its history.
-        Please confirm that you intend to do this, that you understand the consequences, and that
-        you are doing this in accordance with
-        <span class="policy-link" @click="openPolicy">the policy</span>.
+        Anda akan menghapus <strong>{{ item.title }}</strong>
+        beserta seluruh riwayatnya. Harap konfirmasikan bahwa Anda bermaksud melakukan ini, bahwa
+        Anda memahami konsekuensinya, dan bahwa Anda melakukan ini sesuai dengan
+        <span class="policy-link" @click="openPolicy">kebijakan</span>.
       </p>
 
       <div class="form-section">
@@ -15,13 +15,13 @@
         <div class="py-3">
           <input type="checkbox" v-model="isConfirmed" id="confirmDelete" />
           <label for="confirmDelete">
-            I confirm that I want to delete this item and understand the consequences.
+            Saya mengonfirmasi bahwa saya ingin menghapus item ini dan memahami konsekuensinya.
           </label>
         </div>
 
         <div class="button-group">
-          <button @click="handleCancel" class="btn-cancel">Cancel</button>
-          <button @click="handleDelete" class="btn-delete" :disabled="!isConfirmed">Delete</button>
+          <button @click="handleCancel" class="btn-cancel">Batal</button>
+          <button @click="handleDelete" class="btn-delete" :disabled="!isConfirmed">Hapus</button>
         </div>
       </div>
     </div>

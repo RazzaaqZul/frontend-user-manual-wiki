@@ -174,12 +174,6 @@ const closeDeleteDialog = () => {
   itemToDelete.value = null
 }
 
-// Dialog handlers for history
-// const openHistoryDeleteDialog = (history) => {
-//   itemToDeleteHistory.value = history
-//   showHistoryDeleteDialog.value = true
-// }
-
 const closeHistoryDeleteDialog = () => {
   showHistoryDeleteDialog.value = false
   itemToDeleteHistory.value = null

@@ -15,7 +15,7 @@
         >
           <img src="../../assets/images/image-search-not-found.png" class="w-[15%]" />
           <h1 class="font-semibold text-sm text-soft-blue">
-            Try creating the page of User Manual on this wiki to help others!
+            Cobalah membuat halaman Panduan Pengguna di wiki ini untuk membantu orang lain!
           </h1>
         </div>
       </div>
@@ -47,7 +47,7 @@
     <RouterLink to="/main">
       <Button
         text="text-white-background"
-        name="See all help topics"
+        name="Lihat semua panduan pengguna"
         color="bg-soft-blue"
         icon="button-next.png"
         class="absolute top-[48rem] sm:top-[28rem] md:top-[22rem] left-1/2 transform -translate-x-1/2 mb-4 z-50"

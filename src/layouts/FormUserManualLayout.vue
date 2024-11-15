@@ -230,7 +230,7 @@
       <PopUpSuccessful
         v-if="showSuccessEditPopup"
         title="Keren!"
-        message="Kamu berhasil mengedit panduan ini."
+        message="Kamu berhasil mengubah panduan ini."
         class="popup-center animate__animated animate__zoomIn"
       />
 

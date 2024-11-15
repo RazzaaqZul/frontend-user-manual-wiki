@@ -3,13 +3,13 @@
     <Dialog
       v-model:visible="isVisible"
       close-icon="false"
-      header="Delete User"
+      header="Hapus Pengguna"
       pt:root:class="!border-0 !bg-transparent"
       pt:mask:class="backdrop-blur-sm"
       :style="{ width: '25rem' }"
     >
       <span class="text-surface-500 dark:text-surface-400 block mb-8">
-        Are you sure you want to delete this user?
+        Apakah Anda yakin ingin menghapus pengguna ini?
       </span>
 
       <!-- Progress Spinner -->
@@ -19,16 +19,16 @@
 
       <div v-else>
         <div class="flex items-center gap-4 mb-4">
-          <label for="username" class="font-semibold w-24">Username</label>
-          <InputText id="username" class="flex-auto" v-model="localUser.username" disabled />
-        </div>
-        <div class="flex items-center gap-4 mb-4">
-          <label for="email" class="font-semibold w-24">Email</label>
+          <label for="email" class="font-semibold w-24">Alamat Email</label>
           <InputText id="email" class="flex-auto" v-model="localUser.email" disabled />
         </div>
         <div class="flex items-center gap-4 mb-8">
           <label for="name" class="font-semibold w-24">Name</label>
           <InputText id="name" class="flex-auto" v-model="localUser.name" disabled />
+        </div>
+        <div class="flex items-center gap-4 mb-8">
+          <label for="name" class="font-semibold w-24">Peran</label>
+          <InputText id="name" class="flex-auto" v-model="localUser.role" disabled />
         </div>
 
         <!-- Confirmation Checkbox -->
@@ -40,16 +40,16 @@
             class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 duration-300"
           />
           <label for="confirmationCheckbox" class="text-sm"
-            >I am sure I want to delete this user</label
+            >Saya yakin saya ingin menghapus pengguna ini</label
           >
         </div>
 
         <div class="flex justify-end gap-2">
-          <Button type="button" label="Cancel" severity="secondary" @click="closeDialog" />
+          <Button type="button" label="Batal" severity="secondary" @click="closeDialog" />
           <Button
             v-if="!isCurrentUser"
             type="button"
-            label="Delete"
+            label="Hapus"
             severity="danger"
             :disabled="!isConfirmed"
             @click="deleteUser"

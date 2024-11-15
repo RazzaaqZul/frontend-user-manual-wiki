@@ -18,7 +18,7 @@
 
     <div class="px-[15%] py-4">
       <h2 class="text-2xl font-bold text-soft-blue border-b-4 border-grey-input py-5 mb-5">
-        Trash
+        Sampah
       </h2>
 
       <!-- Show spinner while fetching data -->

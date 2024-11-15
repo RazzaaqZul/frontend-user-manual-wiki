@@ -17,7 +17,7 @@
     <PopUpSuccessful
       v-if="showSuccessPopup"
       title="Selamat Datang!"
-      message="Kamu berhasil login"
+      message="Kamu berhasil masuk"
       class="popup-center animate__animated animate__zoomIn"
     />
   </div>

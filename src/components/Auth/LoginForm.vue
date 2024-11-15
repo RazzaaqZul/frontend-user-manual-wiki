@@ -86,7 +86,7 @@
     <div class="text-center">
       <p class="text-sm text-gray-600">
         Belum punya akun?
-        <RouterLink to="/register"> <span class="text-soft-blue">Daftarkan</span> </RouterLink>
+        <RouterLink to="/register"> <span class="text-soft-blue">Daftar</span> </RouterLink>
       </p>
     </div>
   </form>
@@ -135,7 +135,7 @@ const handleSubmit = async () => {
       errors.value = response.data.errors || ['Unknown error occurred']
       emit('error', errors.value)
     } else if (response.status === 401) {
-      errors.value.message = 'Email atau Password salah'
+      errors.value.message = 'Email atau Kata Sandi salah'
       emit('error', errors.value)
     } else {
       errors.value = []
