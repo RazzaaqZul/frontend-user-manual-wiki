@@ -86,7 +86,7 @@ const formattedContent = computed(() => {
     .replace(/<li[^>]*>(.*?)<\/li>/g, '<li class="text-[10px] md:text-[15px] text-md">$1</li>')
     .replace(
       /<img[^>]*src="([^"]*)"[^>]*\/?>/g,
-      '<img src="$1" class="my-5 mx-auto  rounded-[2%] h-auto" alt="Image" />'
+      '<img src="$1" class="w-[80%] my-5 mx-auto  rounded-[2%] h-auto" alt="Image" />'
     )
     .replace(/<[^/>]+><\/[^>]+>/g, '')
 
