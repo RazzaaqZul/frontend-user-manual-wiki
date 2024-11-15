@@ -67,8 +67,10 @@
       <section
         class="flex flex-col justify-start md:flex-row md:justify-between items-center border-b-[3px] border-grey-background mb-5 pb-1 w-full"
       >
-        <h1 class="w-full basis-[70%] font-bold text-[30px] text-soft-blue">Halaman Utama</h1>
-        <div class="w-full flex flex-wrap justify-end items-center gap-2">
+        <h1 class="w-full basis-[70%] lg:basis-[30%] font-bold text-[30px] text-soft-blue">
+          Halaman Utama
+        </h1>
+        <div class="w-full flex flex-wrap justify-end items-center gap-2 lg:basis-[70%]">
           <FilterPopOver
             @categorySelected="onCategorySelected"
             :class="[

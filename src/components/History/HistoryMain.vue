@@ -29,7 +29,7 @@
     <div class="px-[15%] py-4">
       <NavbarComponent />
       <h2 class="text-2xl font-bold text-soft-blue border-b-4 border-grey-input py-5 mb-5">
-        History
+        Riwayat
       </h2>
 
       <!-- Tampilkan tabel dengan currentDataUserManual sebagai baris pertama -->
@@ -40,19 +40,21 @@
         <div
           class="text-soft-blue text-lg font-semibold border-b-4 border-grey-background rounded py-5"
         >
-          {{ currentDataUserManual?.title }} Revision History
+          <span class="text-green-custom">Riwayat Revisi</span>
+          {{ currentDataUserManual?.title }}
         </div>
         <table class="min-w-full table-fixed overflow-x-auto">
           <thead class="hidden lg:table-header-group">
             <tr>
-              <th class="px-4 py-2 text-left">File</th>
-              <th class="px-4 py-2 text-left">Title</th>
-              <th class="px-4 py-2 text-left">Version</th>
-              <th class="px-4 py-2 text-left">Updated At</th>
-              <th class="px-4 py-2 text-left">Editor</th>
-              <th class="px-4 py-2 text-left">Size</th>
+              <th class="px-4 py-2 text-left">Dokumen</th>
+              <th class="px-4 py-2 text-left">Judul</th>
+              <th class="px-4 py-2 text-left">Versi</th>
+              <th class="px-4 py-2 text-left">Deskripsi Perubahan</th>
+              <th class="px-4 py-2 text-left">Diperbarui</th>
+              <th class="px-4 py-2 text-left">Pengefit</th>
+              <th class="px-4 py-2 text-left">Ukuran File</th>
               <th class="px-4 py-2 text-left">Status</th>
-              <th class="px-4 py-2 text-left">Action</th>
+              <th class="px-4 py-2 text-left">Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -62,6 +64,9 @@
               </td>
               <td :class="itemStyle()" data-label="Title">{{ currentDataUserManual.title }}</td>
               <td :class="itemStyle()" data-label="Version">{{ currentDataUserManual.version }}</td>
+              <td :class="itemStyle()" data-label="Deskripsi Perubahan">
+                {{ currentDataUserManual.update_desc }}
+              </td>
               <td :class="itemStyle()" data-label="Updated At">
                 {{ formatDateTime(currentDataUserManual.updated_at) }}
               </td>
@@ -74,7 +79,7 @@
               </td>
               <td :class="itemStyle()" data-label="Size">{{ currentDataUserManual.size }}</td>
               <td :class="itemStyle()" data-label="Status" class="text-soft-blue italic">
-                Latest Version
+                Versi Terbaru
               </td>
               <td :class="itemStyle()" data-label="Action">
                 <img
@@ -101,6 +106,9 @@
               </td>
               <td :class="itemStyle()" data-label="Title">{{ history.title }}</td>
               <td :class="itemStyle()" data-label="Version">{{ history.version }}</td>
+              <td :class="itemStyle()" data-label="Deskripsi Perubahan">
+                {{ history.update_desc }}
+              </td>
               <td :class="itemStyle()" data-label="Updated At">
                 {{
                   history.user_manual_history_id === oldestHistory.user_manual_history_id
@@ -199,6 +207,7 @@ onMounted(async () => {
     const historyResponse = await showUserManualHistory(route.params.id)
     dataUserManualHistory.value = Array.isArray(historyResponse) ? historyResponse : [] // Ensure it's an array
     currentDataUserManual.value = await showUserManual(route.params.id)
+    console.log('User History')
     console.log(currentDataUserManual.value)
     console.log(oldestHistory.value)
   } catch (error) {

@@ -29,13 +29,13 @@
 
     <!-- Password field with show/hide icon -->
     <div class="mb-4 min-h-[6rem]">
-      <label>Password <span class="text-red-custom font-extrabold">*</span></label>
+      <label>Kata Sandi <span class="text-red-custom font-extrabold">*</span></label>
       <div class="border-gradient relative">
         <input
           id="password"
           v-model="input.password"
           :type="showPassword ? 'text' : 'password'"
-          placeholder="Masukkan password"
+          placeholder="Masukkan kata sandi"
           @focus="clearError"
           :class="[inputStyle(), 'pr-12']"
         />
@@ -66,7 +66,7 @@
     <div class="mb-4">
       <button
         type="submit"
-        class="w-full bg-dark-blue text-white-background font-bold py-3 px-4 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+        class="w-full bg-dark-blue h-[60px] text-white-background font-bold py-3 px-4 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
         :disabled="loading"
       >
         <template v-if="loading">

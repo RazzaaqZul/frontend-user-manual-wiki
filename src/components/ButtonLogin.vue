@@ -7,7 +7,7 @@
       <img src="../assets/icon/icon-user.png" :alt="'logo_user'" class="w-5" />
     </div>
     <h1 class="font-normal text-grey-word hidden xl:block">
-      {{ userRole || 'Log In' }}
+      {{ userRole || 'Masuk' }}
     </h1>
     <img src="../assets/icon/icon-arrow-right.png" :alt="'logo_user'" class="w-4 hidden xl:block" />
   </button>
@@ -15,7 +15,7 @@
   <Popover ref="popoverRef" class="ml-[30px]">
     <div class="flex flex-col gap-4">
       <div>
-        <span class="font-semibold block mb-2 text-dark-blue">Opsi Akun</span>
+        <span class="font-semibold block mb-2 text-dark-blue">Opsi Akun {{ userRole }}</span>
         <ul class="list-none p-0 m-0 flex flex-col">
           <li
             v-for="option in filteredOptions"
@@ -34,10 +34,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Popover from 'primevue/popover'
 import { userLogout } from '@/services/modules/AuthService'
+import { validateToken } from '@/services/modules/UserService'
 
 const router = useRouter()
 const popoverRef = ref()
@@ -78,7 +79,7 @@ const selectOption = async (option) => {
 
   if (option.name === 'Masuk') {
     router.push('/login')
-  } else if (option.name === 'Keluar') {
+  } else if (option.name == 'Keluar') {
     try {
       const response = await userLogout()
       console.log(response.status)
@@ -97,4 +98,21 @@ const selectOption = async (option) => {
 const toggle = (event) => {
   popoverRef.value?.toggle(event)
 }
+
+onMounted(async () => {
+  console.log('Dijalankan')
+  const getToken = localStorage.getItem('token')
+  const token = getToken ? JSON.parse(getToken).token : null
+
+  if (!token) {
+    selectOption('Keluar') // Redirect to landing page if no token
+  } else {
+    const userData = await validateToken(token)
+    console.log(userData)
+    if (userData == false) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+    }
+  }
+})
 </script>

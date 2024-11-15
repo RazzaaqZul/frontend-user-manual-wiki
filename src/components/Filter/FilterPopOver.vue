@@ -9,12 +9,12 @@
     <Popover ref="op">
       <div class="flex flex-col gap-4">
         <div>
-          <span class="font-semibold block mb-2 text-dark-blue">Filter by Category</span>
+          <span class="font-semibold block mb-2 text-dark-blue">Filter Berdasarkan Kategori</span>
           <ul class="list-none p-0 m-0 flex flex-col">
             <li
               v-for="category in categories"
               :key="category.name"
-              class="flex items-center gap-2 px-2 py-2 hover:bg-emphasis cursor-pointer rounded-border"
+              class="flex items-center text gap-2 px-2 py-2 hover:bg-emphasis cursor-pointer rounded-border"
               @click="selectCategory(category)"
             >
               <div>

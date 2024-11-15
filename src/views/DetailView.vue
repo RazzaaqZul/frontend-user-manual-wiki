@@ -26,7 +26,7 @@
             <img src="../assets/icon/icon-back.png" class="w-3 lg:w-8" />
           </div>
         </RouterLink>
-        <p class="hidden lg:block text-white-background">back to main page</p>
+        <p class="hidden lg:block text-white-background">Kembali ke halaman utama</p>
       </div>
     </div>
 
@@ -64,7 +64,7 @@
       <!-- Main content area -->
       <div class="w-[100%] lg:w-[80%] ml-auto p-4 lg:p-20">
         <div class="font-semibold text-sm lg:text-lg text-grey-word">
-          Last Updated :
+          Terakhir diperbarui :
           <span class="font-light">{{ formatDate(dataUserManual.updated_at) }}</span>
         </div>
         <div class="flex justify-end items-center gap-2 my-4">
@@ -74,7 +74,7 @@
           >
             <ButtonComponent
               icon="icon-edit.png"
-              name="Edit"
+              name="Ubah"
               color="white-background"
               border="border-2 border-soft-blue"
               text="text-soft-blue"
@@ -86,7 +86,7 @@
           >
             <ButtonComponent
               icon="icon-history.png"
-              name="History"
+              name="Riwayat"
               color="white-background"
               border="border-2 border-soft-blue"
               text="text-soft-blue"

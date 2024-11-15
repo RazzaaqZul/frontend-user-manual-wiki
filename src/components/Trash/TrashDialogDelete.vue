@@ -1,8 +1,8 @@
 <template>
   <section
-    class="fixed w-screen h-screen flex justify-center items-center bg-grey-word bg-opacity-20"
+    class="fixed w-screen h-screen flex justify-center items-center bg-grey-word bg-opacity-20 animate__animated animate__fadeIn"
   >
-    <div class="delete-dialog">
+    <div class="delete-dialog animate__animated animate__fadeInDown">
       <p class="warning-text">
         You are about to delete <strong>{{ item.title }}</strong> along with all of its history.
         Please confirm that you intend to do this, that you understand the consequences, and that
@@ -12,7 +12,7 @@
 
       <div class="form-section">
         <!-- Checkbox confirmation -->
-        <div class="form-group">
+        <div class="py-3">
           <input type="checkbox" v-model="isConfirmed" id="confirmDelete" />
           <label for="confirmDelete">
             I confirm that I want to delete this item and understand the consequences.
@@ -54,8 +54,8 @@ const openPolicy = () => {
 
 <style scoped>
 .delete-dialog {
-  max-width: 600px;
-  padding: 20px;
+  max-width: 700px;
+  padding: 40px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -65,6 +65,7 @@ const openPolicy = () => {
   color: #333;
   margin-bottom: 20px;
   line-height: 1.5;
+  text-align: justify;
 }
 
 .button-group {

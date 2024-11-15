@@ -1,15 +1,15 @@
 <template>
   <section
-    class="fixed w-screen h-screen flex justify-center items-center bg-grey-word bg-opacity-20"
+    class="fixed w-screen h-screen flex justify-center items-center bg-grey-word bg-opacity-20 animate__animated animate__fadeIn"
   >
-    <div class="restore-dialog">
+    <div class="restore-dialog animate__animated animate__fadeInDown">
       <p class="warning-text">
         You are about to restore <strong>{{ item.title }}</strong> back to its original state.
         Please confirm if you want to proceed.
       </p>
 
       <div class="form-section">
-        <div class="form-group">
+        <div class="py-3">
           <input type="checkbox" v-model="isConfirmed" id="confirmRestore" />
           <label for="confirmRestore">
             I confirm that I want to restore this item and understand the consequences.
@@ -49,8 +49,8 @@ const handleRestore = () => {
 
 <style scoped>
 .restore-dialog {
-  max-width: 600px;
-  padding: 20px;
+  max-width: 700px;
+  padding: 40px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

@@ -30,13 +30,15 @@ export const formattedMessage = (errorMessage) => {
           case 'username':
             return 'Username'
           case 'password':
-            return 'Password'
+            return 'Kata Sandi'
           case 'email':
             return 'Email'
           case 'confirmPassword':
             return 'Konfirmasi Password'
           case 'name':
             return 'Nama Lengkap'
+          case 'update_desc':
+            return 'Deskripsi Singkat'
 
           default:
             return field

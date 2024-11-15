@@ -135,6 +135,22 @@
         {{ errorMessage.version[0] }}
       </label>
 
+      <!-- Deskripsi Update -->
+      <div v-if="isUpdate" class="form-group">
+        <label for="creator">Deskripsi Perubahan:</label>
+        <input
+          type="text"
+          id="update_description"
+          v-model="update_description"
+          placeholder="Isi perubahan yang diinginkan"
+          class="input-field"
+        />
+      </div>
+
+      <label v-if="errorMessage?.update_desc?.[0]" class="error-alert">
+        {{ errorMessage.update_desc[0] }}
+      </label>
+
       <!-- Category -->
       <div class="form-group">
         <label for="category">Kategori:</label>
@@ -144,7 +160,7 @@
           optionLabel="name"
           @change="handleCategoryChange"
           class="w-full border-grey-background rounded focus:outline-none focus:ring-2 focus:ring-soft-blue"
-          placeholder="Pilih category"
+          placeholder="Pilih katagori"
           overlayClass="border-grey-background rounded p-2 focus:outline-none focus:ring-2 focus:ring-soft-blue"
         />
       </div>
@@ -254,11 +270,21 @@ const props = defineProps({
 const visible = ref(false)
 
 // Reactive form object
-const form = ref(props.form)
+const form = ref({
+  ...props.form,
+  update_desc: '' // Set default for update_desc or modify as needed
+})
 
 // Watch for changes to props and update form
 watchEffect(() => {
   form.value = { ...props.form }
+})
+
+// save update_desc
+const update_description = ref()
+watch(update_description, (newValue) => {
+  console.log('update_desc ' + form.value.update_desc)
+  form.value.update_desc = newValue
 })
 
 // Get creator from localStorage and update form properties
@@ -386,16 +412,36 @@ const handleSubmit = async () => {
         }, 3000)
       }
     } else {
-      response = await updateUserManual(form.value, form.value.user_manual_id)
-      if (response.status === 400) {
+      const response = await updateUserManual(
+        {
+          ...form.value,
+          update_desc: update_description.value
+        },
+        form.value.user_manual_id
+      )
+
+      if (response.status === 401) {
         // Check for errors in response
+        errorMessage.value = response.data.errors || ['Unknown error occurred'] // Assign error messages to errorMessage
+        // Show PopUp
+        showErrorPopup.value = true
+        isLeave.value = true
+        setTimeout(() => {
+          isLeave.value = false
+          showErrorPopup.value = false
+        }, 3000)
+      } else if (response.status === 400) {
+        // Check for errors in response
+        errorMessage.value = []
         console.log(response)
         if (response.data.errors.title) {
           console.log('ini title')
           errorMessage.value.title = [response.data.errors.title]
         } else if (response.data.errors.version) {
           console.log('ini version')
-          errorMessage.value.version = [response.data.errors.version]
+          const errorVersion = response.data.errors.version
+          console.log(errorVersion)
+          errorMessage.value.version = !Array.isArray(errorVersion) ? [errorVersion] : errorVersion
         } else {
           errorMessage.value = response.data.errors
         }

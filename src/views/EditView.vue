@@ -6,7 +6,7 @@
       <RouterLink :to="`/main/user-manuals/${dataUserManual.user_manual_id}/histories`">
         <ButtonComponent
           icon="icon-history.png"
-          name="History"
+          name="Riwayat"
           color="white-background"
           border="border-2 border-soft-blue"
           text="text-soft-blue"

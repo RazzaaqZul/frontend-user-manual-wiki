@@ -41,13 +41,16 @@
 
       <!-- Password Field with Toggle Visibility -->
       <div class="password min-h-[6rem] flex flex-col">
-        <label>Password <span class="text-red-custom font-extrabold">*</span></label>
+        <label>Kata Sandi <span class="text-red-custom font-extrabold">*</span></label>
         <div class="border-gradient relative">
           <input
             id="password"
             v-model="input.password"
             :type="showPassword ? 'text' : 'password'"
-            placeholder="Masukkan password"
+            placeholder="Masukkan kata sandi"
+            oncopy="return false"
+            onpaste="return false"
+            oncut="return false"
             @focus="clearError"
             :class="[inputStyle()]"
           />
@@ -61,21 +64,24 @@
           </div>
         </div>
         <label class="text-grey-word italic">
-          Password harus terdiri dari 1 huruf kapital dan 1 angka
+          Kata sandi harus terdiri dari 1 huruf kapital dan 1 angka
         </label>
         <p v-if="errors?.password?.[0]" :class="[errorStyle()]">{{ errors.password[0] }}</p>
       </div>
 
       <!-- Confirm Password Field with Toggle Visibility -->
       <div class="confirm password min-h-[6rem]">
-        <label>Konfirmasi Password <span class="text-red-custom font-extrabold">*</span></label>
+        <label>Konfirmasi Kata Sandi <span class="text-red-custom font-extrabold">*</span></label>
         <div class="border-gradient relative">
           <input
             id="confirmPassword"
             v-model="input.confirmPassword"
             :type="showConfirmPassword ? 'text' : 'password'"
-            placeholder="Konfirmasi password"
+            placeholder="Konfirmasi kata sandi"
             @focus="clearError"
+            oncopy="return false"
+            onpaste="return false"
+            oncut="return false"
             :class="[inputStyle()]"
           />
           <div class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center">
@@ -141,7 +147,7 @@ const showConfirmPassword = ref(false)
 
 const inputStyle = () =>
   'border-gradient-inner focus:outline-none focus:ring-2 focus:ring-soft-blue focus:border-transparent w-full '
-const errorStyle = () => 'text-red-custom animate__animated animate__fadeInDown mx-[1rem]'
+const errorStyle = () => 'text-red-custom animate__animated animate__fadeInDown mx-[1rem] text-sm'
 
 const router = useRouter()
 const emit = defineEmits(['success', 'error'])
@@ -150,7 +156,7 @@ const emit = defineEmits(['success', 'error'])
 const handleSubmit = async () => {
   errors.value = {}
   if (input.value.password !== input.value.confirmPassword) {
-    errors.value.confirmPassword = ['Password tidak cocok']
+    errors.value.confirmPassword = ['Kata sandi tidak cocok']
     emit('error', errors.value)
     return
   }
