@@ -1,7 +1,7 @@
 // Function to generate a formatted error message
 export const formattedMessage = (errorMessage) => {
   console.log('test ini formattedMessage')
-  console.log(errorMessage[0])
+  console.log(errorMessage)
 
   if (errorMessage[0] == 'Unknown error occurred') {
     return 'Sesi anda telah habis atau invalid, harap login kembali!'
@@ -16,7 +16,7 @@ export const formattedMessage = (errorMessage) => {
       .map((field) => {
         switch (field) {
           case 'img':
-            return 'Image'
+            return 'Gambar'
           case 'short_desc':
             return 'Deskripsi Singkat'
           case 'category':
@@ -38,7 +38,7 @@ export const formattedMessage = (errorMessage) => {
           case 'name':
             return 'Nama Lengkap'
           case 'update_desc':
-            return 'Deskripsi Singkat'
+            return 'Deskripsi Perubahan'
 
           default:
             return field

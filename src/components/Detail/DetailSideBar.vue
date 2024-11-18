@@ -9,7 +9,7 @@
     @scroll="handleManualScroll"
   >
     <div class="flex md:relative justify-between items-center cursor-pointer px-10">
-      <h1>Contents</h1>
+      <h1>Konten</h1>
       <div class="bg-soft-blue rounded-full p-1 hover:scale-110 duration-300">
         <img
           src="../../assets/icon/icon-x.png"

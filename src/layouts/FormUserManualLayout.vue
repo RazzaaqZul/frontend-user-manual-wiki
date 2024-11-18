@@ -187,19 +187,19 @@
       </p>
 
       <!-- Action Buttons -->
-      <div class="form-actions">
+      <div class="flex justify-end gap-2">
         <RouterLink
           :to="form.user_manual_id ? `/main/user-manuals/${form.user_manual_id}` : '/main'"
         >
-          <button type="button" class="cancel-button">Batal</button>
+          <button type="button" class="cancel-button w-full duration-300">Batal</button>
         </RouterLink>
 
         <!-- Conditionally render the ProgressSpinner or the Save button -->
         <button
           type="submit"
           :class="[
-            'save-button',
-            'duration-300',
+            'w-24 bg-soft-blue py-2 px-4 hover:opacity-60 rounded-lg text-white-background',
+            'duration-300 ',
             loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
           ]"
           :disabled="loading"

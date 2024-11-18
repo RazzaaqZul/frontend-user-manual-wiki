@@ -101,12 +101,12 @@
         <div v-if="route.query.search" class="flex flex-col justify-start gap-2 mb-5">
           <template v-if="actualMatchCount > 0">
             <h1 class="text-dark-blue text-xl font-semibold">
-              {{ actualMatchCount }} results found
+              {{ actualMatchCount }} hasil ditemukan
             </h1>
             <h2 class="text-grey-word">
-              Create the page
+              Buat halaman
               <span class="text-soft-blue font-semibold">"{{ route.query.search }}"</span>
-              on this wiki! See also the search results found.
+              di wiki ini! Lihat juga hasil pencarian yang ditemukan.
             </h2>
           </template>
           <template v-else>

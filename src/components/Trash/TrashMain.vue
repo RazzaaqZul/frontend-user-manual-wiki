@@ -31,7 +31,7 @@
         v-else-if="!userManualTrash.length"
         class="w-full flex justify-center items-center h-[60vh]"
       >
-        <p class="text-gray-500">No trash items available.</p>
+        <p class="text-gray-500">Tidak ada sampah!</p>
       </section>
 
       <!-- Show table if there is data -->

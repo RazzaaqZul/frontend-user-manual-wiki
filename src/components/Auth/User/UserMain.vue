@@ -10,11 +10,11 @@
     >
       <div class="card">
         <DataTable :value="users" tableStyle="min-width: 50rem" responsiveLayout="scroll">
-          <Column field="name" header="Name" style="width: 150px" class="sm:w-40 md:w-60"></Column>
+          <Column field="name" header="Nama" style="width: 150px" class="sm:w-40 md:w-60"></Column>
 
           <Column
             field="email"
-            header="Nama"
+            header="Email"
             style="width: 200px"
             class="break-all sm:w-40 md:w-60"
           ></Column>

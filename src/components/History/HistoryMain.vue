@@ -51,7 +51,7 @@
               <th class="px-4 py-2 text-left">Versi</th>
               <th class="px-4 py-2 text-left">Deskripsi Perubahan</th>
               <th class="px-4 py-2 text-left">Diperbarui</th>
-              <th class="px-4 py-2 text-left">Pengefit</th>
+              <th class="px-4 py-2 text-left">Pengubah</th>
               <th class="px-4 py-2 text-left">Ukuran File</th>
               <th class="px-4 py-2 text-left">Status</th>
               <th class="px-4 py-2 text-left">Aksi</th>
@@ -73,8 +73,8 @@
               <td :class="itemStyle()" data-label="Editor">
                 {{
                   dataUserManualHistory.length !== 0
-                    ? 'Edited By ' + currentDataUserManual.latest_editor
-                    : 'Created By ' + currentDataUserManual.initial_editor
+                    ? 'Diubah oleh ' + currentDataUserManual.latest_editor
+                    : 'Dibuat oleh ' + currentDataUserManual.initial_editor
                 }}
               </td>
               <td :class="itemStyle()" data-label="Size">{{ currentDataUserManual.size }}</td>
@@ -119,8 +119,8 @@
               <td :class="itemStyle()" data-label="Editor">
                 {{
                   history.user_manual_history_id === oldestHistory.user_manual_history_id
-                    ? 'Created By ' + history.initial_editor
-                    : 'Edited By ' + history.latest_editor
+                    ? 'Dibuat oleh ' + history.initial_editor
+                    : 'Diubah oleh ' + history.latest_editor
                 }}
               </td>
               <td :class="itemStyle()" data-label="Size">{{ history.size }}</td>

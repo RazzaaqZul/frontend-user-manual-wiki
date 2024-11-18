@@ -219,6 +219,10 @@ table tbody tr td::before {
   border: none;
 }
 
+.cancel-button:hover {
+  opacity: 60%;
+}
+
 /* Save button */
 .save-button {
   width: 10%;
