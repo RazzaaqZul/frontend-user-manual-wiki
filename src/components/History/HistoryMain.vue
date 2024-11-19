@@ -60,7 +60,9 @@
           <tbody>
             <tr v-if="currentDataUserManual" class="block lg:table-row">
               <td :class="itemStyle()" data-label="File">
-                <img src="../../assets/icon/icon-file.png" class="w-8" alt="logo-file" />
+                <div class="flex justify-center items-center">
+                  <img src="../../assets/icon/icon-file.png" class="w-8" alt="logo-file" />
+                </div>
               </td>
               <td :class="itemStyle()" data-label="Title">{{ currentDataUserManual.title }}</td>
               <td :class="itemStyle()" data-label="Version">{{ currentDataUserManual.version }}</td>
@@ -101,7 +103,12 @@
                 <RouterLink
                   :to="`/main/user-manuals/${history.user_manual_id}/histories/${history.user_manual_history_id}/detail`"
                 >
-                  <img src="../../assets/icon/icon-file.png" class="w-8" alt="logo-file" />
+                  <div class="flex flex-col items-center">
+                    <img src="../../assets/icon/icon-file.png" class="w-8" alt="logo-file" />
+                    <p class="text-sm text-soft-blue italic hover:underline duration-300">
+                      Lihat detail
+                    </p>
+                  </div>
                 </RouterLink>
               </td>
               <td :class="itemStyle()" data-label="Title">{{ history.title }}</td>
