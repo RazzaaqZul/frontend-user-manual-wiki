@@ -18,15 +18,15 @@
         </h1>
       </div>
       <!-- button back to main page -->
-      <div class="absolute left-[5%] top-[30%] flex justify-center items-center gap-4">
-        <RouterLink to="/main">
+      <div class="absolute left-[5%] top-[30%] z-10 flex justify-center items-center gap-4">
+        <RouterLink to="/main" class="flex items-center justify-center">
           <div
             class="bg-white-background rounded-full p-2 hover:scale-110 duration-300 hover:shadow-2xl hover:shadow-dark-blue"
           >
-            <img src="../assets/icon/icon-back.png" class="w-3 lg:w-8" />
+            <img src="../assets/icon/icon-back.png" class="w-3 lg:w-8" alt="Back to Main" />
           </div>
         </RouterLink>
-        <p class="hidden lg:block text-white-background">Kembali ke halaman utama</p>
+        <span class="ml-2 text-white-background hidden lg:block"> Kembali ke halaman utama </span>
       </div>
     </div>
 

@@ -1,7 +1,7 @@
 <template>
   <button
     @click="toggle"
-    class="xl:bg-white-background xl:shadow-lg drop-shadow-lg w-fit flex justify-center items-center gap-3 rounded-3xl py-2 px-6 hover:scale-110 duration-150"
+    class="xl:bg-white-background xl:shadow-lg drop-shadow-lg w-fit flex z-10 justify-center items-center gap-3 rounded-3xl py-2 px-6 hover:scale-110 duration-150"
   >
     <div class="bg-gradient-color w-fit rounded-full p-2">
       <img src="../assets/icon/icon-user.png" :alt="'logo_user'" class="w-5" />
