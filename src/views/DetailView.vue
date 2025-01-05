@@ -94,6 +94,10 @@
           </RouterLink>
         </div>
         <!-- Main content for the page goes here -->
+        <div class="flex justify-start gap-2">
+          <!-- <h2>Deskripsi Singkat:</h2> -->
+          <p>{{ dataUserManual.short_desc }}</p>
+        </div>
         <DetailContent :content="dataUserManual.content" />
       </div>
     </section>

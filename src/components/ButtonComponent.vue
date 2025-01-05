@@ -1,3 +1,4 @@
+/
 <template>
   <button
     :class="`${color} ${border}  ${text} p-2 lg:px-4 lg:py-3 rounded-[10px] w-fit flex justify-center items-center gap-3 hover:bg-dark-blue duration-300 hover:text-white-background hover:opacity-80`"
